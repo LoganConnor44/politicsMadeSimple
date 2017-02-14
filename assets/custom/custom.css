@@ -1,0 +1,55 @@
+.panel-footer {
+    height:100px;
+    background-color: chartreuse;
+}
+
+#mini-footer {
+    min-height: 20px;
+}
+
+.push-to-right {
+    float: right;
+    top: 50%;
+    padding-right: 10px;
+}
+
+ul.stately {
+    width:300px; /*width and font size must match*/
+    font-size:300px;
+    color: #006064;
+    background-color: transparent;
+}
+
+#mainNav {
+    border-radius: 0;
+}
+
+.hor-line {
+    position: relative;
+    text-align: center;
+}
+
+.hor-line span {
+    background: #fff;
+    padding: 0 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.hor-line:before {
+    background: #ddd;
+    content: "";
+    display: block;
+    height: 1px;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+}
+
+.hor-line:before {
+    left: 0;
+}
+
+#horLine {
+	background-color: #EEE;
+}

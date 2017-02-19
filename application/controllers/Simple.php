@@ -9,7 +9,8 @@
 			$this->load->library(array(
 				'officials' => 'offs',
 				'legislators' => 'legis',
-				'states' => 'states'
+				'states' => 'states',
+				'events' => 'events'
 			));
 		}
 
@@ -43,6 +44,11 @@
 				'stateNames' => $this->states->getAllStateNamesAndAbbrevs($statesOverview)
 			);
 			$this->load->view('test_v', $data);
+		}
+
+		public function testEvents(){
+			$statesOverview = $this->states->getStatesOverview();
+			$statesOverview = $this->events->getEventsForSelectedState();
 		}
 
 		public function elections()

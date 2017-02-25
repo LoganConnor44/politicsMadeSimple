@@ -82,4 +82,6 @@ $(document).ready(function() {
         $(randomElement).css('color', newColor());
         console.log(randState());
     }, 1500);
+	//Allows Side Navigation From MaterializeCSS
+	$(".button-collapse").sideNav();
 });

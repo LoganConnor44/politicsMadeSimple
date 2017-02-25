@@ -3,22 +3,24 @@
 <head>
 	<meta charset="utf-8">
 	<title>Politics Made Simple</title>
-	<!-- Material Design fonts -->
-	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('vendor/twbs/bootstrap/dist/css/bootstrap.min.css') ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/bootstrap-material-design-master/dist/css/bootstrap-material-design.min.css') ?>">
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/bootstrap-material-design-master/dist/css/ripples.min.css') ?>">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-	<script src="<?php echo base_url('vendor/twbs/bootstrap/dist/js/bootstrap.js') ?>"></script>
-	<script src="<?php echo base_url('assets/bootstrap-material-design-master/dist/js/material.min.js') ?>"></script>
-	<script src="<?php echo base_url('assets/bootstrap-material-design-master/dist/js/ripples.min.js') ?>"></script>
+	<!--Import Google Icon Font-->
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!--Import materialize.css-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css" media="screen,projection"/>
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<!--Import jQuery before materialize.js-->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+	<!--Import Stately library-->
 	<link rel="stylesheet" href="<?php echo base_url('assets/stately-master/assets/css/stately.css') ?>">
+	<!-- Import Custom CSS and JS files -->
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/custom/custom.css') ?>">
 	<script src="<?php echo base_url('assets/custom/custom.js') ?>"></script>
 	<script>
-		$(function() {
-			$.material.init();
+		$( document ).ready(function(){
+			//Allows Side Navigation From MaterializeCSS
+			$(".button-collapse").sideNav();
 		});
 	</script>
 </head>

@@ -17,10 +17,18 @@
 	<!-- Import Custom CSS and JS files -->
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/custom/custom.css') ?>">
 	<script src="<?php echo base_url('assets/custom/custom.js') ?>"></script>
+	<script src="<?php echo base_url('assets/custom/custom.php') ?>"></script>
 	<script>
-		$( document ).ready(function(){
-			//Allows Side Navigation From MaterializeCSS
-			$(".button-collapse").sideNav();
+		$(document).ready(function() {
+			$('select').material_select();
+		});
+		$(document).ready(function(){
+			$('.collapsible').collapsible();
+		});
+		$(document).ready(function(){
+			$('#scaleInLegislatorSearch').click(function(){
+				$('#stateSelectForm').addClass('scale-transition');
+			});
 		});
 	</script>
 </head>

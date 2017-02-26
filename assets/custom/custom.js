@@ -72,6 +72,8 @@ function randState(){
     return(states[randomState]);
 }
 
+
+
 $(document).ready(function() {
     for(var i = 0; i <= 40; i++){
         var initialElements = document.getElementsByClassName(randState());
@@ -80,8 +82,11 @@ $(document).ready(function() {
     window.setInterval(function(){
         var randomElement = document.getElementsByClassName(randState());
         $(randomElement).css('color', newColor());
-        console.log(randState());
     }, 1500);
+
 	//Allows Side Navigation From MaterializeCSS
-	$(".button-collapse").sideNav();
+	$(".button-collapse").sideNav({
+		menuWidth: 150,
+		draggable: true
+	});
 });

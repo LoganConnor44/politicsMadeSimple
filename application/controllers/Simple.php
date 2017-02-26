@@ -34,6 +34,13 @@
 			$this->load->view('main_v', $data);
 		}
 
+		public function ajaxAllStates()
+		{
+			$statesOverview = $this->states->getStatesOverview();
+			$stateNamesAndAbbrev = $this->states->getAllStateNamesAndAbbrevs($statesOverview);
+			return $stateNamesAndAbbrev;
+		}
+
 		public function testing()
 		{
 			$statesOverview = $this->states->getStatesOverview();

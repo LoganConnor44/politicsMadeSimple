@@ -102,7 +102,6 @@ function createStateSelect(statesObj){
     select.setAttribute('id', 'stateSelect');
     option.setAttribute('value', '');
     label.innerHTML = 'Select State';
-    option
     for(var state in statesObj){
         var option = document.createElement('option');
         option.setAttribute('value', state);
@@ -114,6 +113,10 @@ function createStateSelect(statesObj){
     row.appendChild(inputField);
     content.appendChild(row);
     appendHere.appendChild(content);
+    $('#appendSelectHere').hide().slideDown('fast');
+    $('html, body').animate({
+        scrollTop: 1000
+    }, 2000);
 
     //Tell materialize to intialize the select
     $(document).ready(function() {

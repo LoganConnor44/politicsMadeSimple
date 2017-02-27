@@ -38,7 +38,7 @@
 		{
 			$statesOverview = $this->states->getStatesOverview();
 			$stateNamesAndAbbrev = $this->states->getAllStateNamesAndAbbrevs($statesOverview);
-			return $stateNamesAndAbbrev;
+			echo json_encode($stateNamesAndAbbrev);
 		}
 
 		public function testing()

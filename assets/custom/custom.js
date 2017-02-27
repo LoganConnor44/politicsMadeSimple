@@ -72,6 +72,73 @@ function randState(){
     return(states[randomState]);
 }
 
+function getStatesFromPHP(){
+    var baseUrl = 'http://localhost/politicsMadeSimple/index.php/';
+    $.ajax({
+        url: baseUrl + 'Simple/ajaxAllStates',
+        type : 'GET',
+        dataType:'json',
+        contentType: "application/json;charset=utf-8",
+        success: function(statesObj){
+            destroyIconAndReplace();
+            createStateSelect(statesObj);
+
+        }});
+}
+
+function createStateSelect(statesObj){
+    var appendHere = document.getElementById('appendSelectHere');
+    var content = document.createElement('div');
+    var row = document.createElement('div');
+    var inputField = document.createElement('div');
+    var select = document.createElement('select');
+    var option = document.createElement('option');
+    var label = document.createElement('label');
+    content.setAttribute('class', 'card-content blue darken-1');
+    row.setAttribute('class', 'row');
+    inputField.setAttribute('class', 'input-field col s12');
+    select.setAttribute('name', 'stateSelect');
+    select.setAttribute('form', 'legislators');
+    select.setAttribute('id', 'stateSelect');
+    option.setAttribute('value', '');
+    label.innerHTML = 'Select State';
+    option
+    for(var state in statesObj){
+        var option = document.createElement('option');
+        option.setAttribute('value', state);
+        option.innerHTML = statesObj[state];
+        select.appendChild(option);
+    }
+    inputField.appendChild(select);
+    inputField.appendChild(label);
+    row.appendChild(inputField);
+    content.appendChild(row);
+    appendHere.appendChild(content);
+
+    //Tell materialize to intialize the select
+    $(document).ready(function() {
+        $('select').material_select();
+    });
+    return true;
+}
+
+function destroyIconAndReplace(){
+    var sendIcon = document.getElementById('stateSearchIcon');
+    var anchor = document.getElementById('repurposeAnchor');
+    var newIcon = document.createElement('i');
+    $('#stateSearchIcon').switchClass('scale-in', 'scale-out', 'fast', function deleteElement(){
+        this.remove();
+    });
+    anchor.setAttribute('type', 'submit');
+    newIcon.setAttribute('class', 'material-icons scale-transition scale-out');
+    newIcon.setAttribute('id', 'newIcon');
+    newIcon.setAttribute('onClick', 'document.getElementById("legislators").submit()');
+    newIcon.innerHTML = 'send';
+    anchor.appendChild(newIcon);
+    $('#newIcon').switchClass('scale-out', 'scale-in', 'fast');
+    console.log(anchor);
+}
+
 
 
 $(document).ready(function() {

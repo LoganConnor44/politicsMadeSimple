@@ -53,3 +53,17 @@ ul.stately {
 #horLine {
 	background-color: #EEE;
 }
+
+/*Last Row Has 20px Margin This Makes Up For That Extra Space*/
+.extraBottomPadding{
+    padding-bottom: 20px;
+}
+
+/*Footer Has 20px Extra Padding - Taking It Away*/
+.noTopPadding{
+    padding-top: 0px !important;
+}
+
+#customLinkColour{
+    color: #1de9b6;
+}

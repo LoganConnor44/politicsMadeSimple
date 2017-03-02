@@ -1,4 +1,4 @@
-<nav class="red">
+<nav class="red lighten-1">
 	<div class="nav-wrapper">
 		<a href="<?php echo base_url() ?>" class="brand-logo">Politics Made Simple</a>
 		<a href="#" data-activates="mobileNavigation" class="button-collapse">

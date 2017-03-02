@@ -1,9 +1,10 @@
-<div class="teal white-text">
+<div class="teal white-text extraBottomPadding">
 	<div class="container">
 		<div class="row">
-			<div class="col s12">
-				<h1>State Legislature</h1>
-				<p>
+			<div class="col s12 m12">
+				<h1 class="center-align">State Legislature</h1>
+				<div class="divider"></div>
+				<p class="flow-text">
 					State Legislators create and approve laws for their state. Every legislator is an elected official from
 					their state. State Legislatures are made up of two chambers: the Senate and the House.<sup>*</sup>
 					The	composition of each chamber varies and is determined by the state.
@@ -14,8 +15,9 @@
 			<div class="col s12 m6">
 				<div class="card blue">
 					<div class="card-content white-text">
-						<span class="card-title"><h2>Senate</h2></span>
-						<p>
+						<span class="card-title"><h2 class="center-align">Senate</h2></span>
+						<div class="divider"></div>
+						<p class="flow-text">
 							The State Senate is the smaller of the two chambers and has the ability to approve impeachment of an
 							official. The term length for a state senator is usually 4 years.
 						</p>
@@ -23,15 +25,16 @@
 				</div>
 			</div>
 			<div class="col s12 m6">
-				<div class="card blue">
+				<div class="card blue" id="testing">
 					<div class="card-content white-text">
-						<span class="card-title"><h2>House</h2></span>
-						<p>
+						<span class="card-title"><h2 class="center-align">House</h2></span>
+						<div class="divider"></div>
+						<p class="flow-text">
 							The House of Representatives is the larger of the two chambers and has the ability to initiate tax
 							legislation and the impeachment process of an official. The term length for a House Representative is
 							usually two years.
 						</p>
-						<p>
+						<p class="flow-text">
 							The leadership title within the House is called The Speaker of the House.
 						</p>
 					</div>

@@ -35,7 +35,7 @@
 					</p>
 					<?php echo $htmlChamberResponse ?>
 					<p>
-						Their official webpage can be found <a href="<?php echo $stateDetail->legislature_url ?>">here</a>.
+						Their official webpage can be found <a id="customLinkColour" href="<?php echo $stateDetail->legislature_url ?>">here</a>.
 					</p>
 					<h2>Events</h2>
 					<?php if(!$upcomingEvents) : ?>

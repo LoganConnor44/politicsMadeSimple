@@ -126,10 +126,9 @@ function createStateSelect(statesObj){
 }
 
 function destroyIconAndReplace(){
-    var sendIcon = document.getElementById('stateSearchIcon');
     var anchor = document.getElementById('repurposeAnchor');
     var newIcon = document.createElement('i');
-    $('#stateSearchIcon').switchClass('scale-in', 'scale-out', 'fast', function deleteElement(){
+    $('#stateSearchIcon').switchClass('scale-in', 'scale-out', 1500, function deleteElement(){
         this.remove();
     });
     anchor.setAttribute('type', 'submit');
@@ -139,7 +138,6 @@ function destroyIconAndReplace(){
     newIcon.innerHTML = 'send';
     anchor.appendChild(newIcon);
     $('#newIcon').switchClass('scale-out', 'scale-in', 'fast');
-    console.log(anchor);
 }
 
 

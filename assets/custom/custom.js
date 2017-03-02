@@ -73,9 +73,8 @@ function randState(){
 }
 
 function getStatesFromPHP(){
-    var baseUrl = window.politicsMadeSimple.baseUrl + '/index.php/';
     $.ajax({
-        url: baseUrl + 'Simple/ajaxAllStates',
+        url: window.politicsMadeSimple.baseUrl + 'index.php/Simple/ajaxAllStates',
         type : 'GET',
         dataType:'json',
         contentType: "application/json;charset=utf-8",

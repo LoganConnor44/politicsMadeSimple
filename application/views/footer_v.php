@@ -2,8 +2,8 @@
 <footer class="page-footer noTopPadding">
 	<div class="footer-copyright">
 		<div class="container">
-			© 2014 Copyright Text
-			<a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+			Data Provided By
+			<a class="grey-text text-lighten-4" href="https://openstates.org/">OpenStates.org</a>
 		</div>
 	</div>
 </footer>

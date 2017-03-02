@@ -19,6 +19,10 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/custom/custom.css') ?>">
 		<script src="<?php echo base_url('assets/custom/custom.js') ?>"></script>
 		<script>
+
+			window.politicsMadeSimple = {};
+			window.politicsMadeSimple.baseUrl = '<?php echo base_url()?>';
+
 			$(document).ready(function(){
 				$('.collapsible').collapsible();
 			});

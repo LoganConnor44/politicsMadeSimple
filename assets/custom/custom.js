@@ -73,9 +73,8 @@ function randState(){
 }
 
 function getStatesFromPHP(){
-    var baseUrl = 'http://localhost/politicsMadeSimple/index.php/';
     $.ajax({
-        url: baseUrl + 'Simple/ajaxAllStates',
+        url: window.politicsMadeSimple.baseUrl + 'index.php/Simple/ajaxAllStates',
         type : 'GET',
         dataType:'json',
         contentType: "application/json;charset=utf-8",
@@ -96,15 +95,18 @@ function createStateSelect(statesObj){
     var label = document.createElement('label');
     content.setAttribute('class', 'card-content blue darken-1');
     row.setAttribute('class', 'row');
-    inputField.setAttribute('class', 'input-field col s12');
+    inputField.setAttribute('class', 'col s12');
     select.setAttribute('name', 'stateSelect');
     select.setAttribute('form', 'legislators');
     select.setAttribute('id', 'stateSelect');
+    select.setAttribute('class', 'browser-default');
     option.setAttribute('value', '');
+    label.setAttribute('id', 'stateSelectLabel');
     label.innerHTML = 'Select State';
     for(var state in statesObj){
         var option = document.createElement('option');
         option.setAttribute('value', state);
+        option.setAttribute('class', 'black');
         option.innerHTML = statesObj[state];
         select.appendChild(option);
     }
@@ -117,8 +119,6 @@ function createStateSelect(statesObj){
     $('html, body').animate({
         scrollTop: 1000
     }, 2000);
-
-    //Tell materialize to intialize the select
     $(document).ready(function() {
         $('select').material_select();
     });

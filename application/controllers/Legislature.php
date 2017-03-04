@@ -76,4 +76,10 @@
 			echo "<pre>";
 			var_dump($sortedByPartyAndChamber);
 		}
+
+		public function testEvents(){
+			$fullResponse = $this->events->getEventsForSelectedState('FL');
+			$result = $this->events->upcomingEvents($fullResponse);
+			var_dump($result);
+		}
 	}

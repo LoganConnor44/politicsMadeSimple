@@ -67,3 +67,13 @@ ul.stately {
 #customLinkColour{
     color: #1de9b6;
 }
+
+select{
+    background-color: #2196f3;
+    border-color: #82b1ff;
+    color: #e3f2fd;
+}
+
+#stateSelectLabel{
+    color: #e3f2fd;
+}

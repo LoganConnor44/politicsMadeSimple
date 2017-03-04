@@ -49,6 +49,7 @@
 		public function getPartiesInApiResponse($fullApiResponse){
 			$parties = array();
 			foreach($fullApiResponse as &$legis){
+				//if dirty data - party does not exist - set it as 'No Data'
 				if(!isset($legis->party)){
 					$legis->party = 'No Data';
 				}
@@ -93,6 +94,7 @@
 				'lower',
 			);
 			foreach($fullApiResponse as $legislator){
+				//if dirty data - chamber does not exist - set it as 'No Data'
 				if(!isset($legislator->chamber)){
 					$legislator->chamber = 'No Data';
 				}

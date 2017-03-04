@@ -41,7 +41,7 @@
 					<?php if(!$isThereAnUpcomingEvent) : ?>
 						<p>There are no upcoming events.</p>
 					<?php else : ?>
-						<p>There are upcoming events!</p>
+						<p>There are <?php echo $numberOfEvents ?> upcoming events!</p>
 					<?php endif; ?>
 				</div>
 			</div>

@@ -50,7 +50,7 @@
 			$parties = array();
 			foreach($fullApiResponse as &$legis){
 				if(!isset($legis->party)){
-					var_dump($legis);
+					$legis->party = 'No Data';
 				}
 				$parties[trim($legis->party)] = trim($legis->party);
 			}
@@ -90,9 +90,12 @@
 			$sortedLegislatorsByChamber = array();
 			$chambers = array(
 				'upper',
-				'lower'
+				'lower',
 			);
 			foreach($fullApiResponse as $legislator){
+				if(!isset($legislator->chamber)){
+					$legislator->chamber = 'No Data';
+				}
 				if(in_array($legislator->party, $parties) && in_array($legislator->chamber, $chambers)){
 					$sortedLegislatorsByChamber[trim($legislator->party)][trim($legislator->chamber)][] = $legislator;
 				}

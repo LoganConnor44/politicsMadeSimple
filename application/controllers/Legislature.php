@@ -26,6 +26,7 @@
 			$chamberCounts = $this->legis->getChamberCounts($apiResponse);
 			$upcomingEvents = $this->events->getEventsForSelectedState($this->userDefinedState);
 			$isThereAnUpcomingEvent = $this->events->upcomingEvents($upcomingEvents);
+			$isThereAnUpcomingEvent ? $numberOfEvents = $this->events->howManyEvents($upcomingEvents) : $numberOfEvents = FALSE;
 			$doesUpperChamberExist = $this->states->doesUpperChamberExist($stateDetail);
 			$doesLowerChamberExist = $this->states->doesLowerChamberExist($stateDetail);
 			$htmlChamberResponse = $this->formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist,
@@ -38,7 +39,8 @@
 				'parties' => $sortedParties,
 				'totalLegislators' => count($apiResponse),
 				'civicDataBy' => $this->civicDataBy,
-				'upcomingEvents' => $isThereAnUpcomingEvent ? $upcomingEvents : $isThereAnUpcomingEvent,
+				'isThereAnUpcomingEvent' => $isThereAnUpcomingEvent,
+				'numberOfEvents' => $numberOfEvents,
 				'htmlChamberResponse' => $htmlChamberResponse,
 				'landingPage' => FALSE,
 				'partyAndChamber' => $sortedByPartyAndChamber
@@ -78,8 +80,10 @@
 		}
 
 		public function testEvents(){
-			$fullResponse = $this->events->getEventsForSelectedState('FL');
+			$fullResponse = $this->events->getEventsForSelectedState('fl');
 			$result = $this->events->upcomingEvents($fullResponse);
+			$numberOfEvents = $this->events->howManyEvents($fullResponse);
+
 			var_dump($result);
 		}
 	}

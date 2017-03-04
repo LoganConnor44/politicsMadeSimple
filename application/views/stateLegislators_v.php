@@ -38,10 +38,9 @@
 						Their official webpage can be found <a id="customLinkColour" href="<?php echo $stateDetail->legislature_url ?>">here</a>.
 					</p>
 					<h2>Events</h2>
-					<?php if(!$upcomingEvents) : ?>
+					<?php if(!$isThereAnUpcomingEvent) : ?>
 						<p>There are no upcoming events.</p>
-					<?php endif; ?>
-					<?php if(is_object($upcomingEvents)) : ?>
+					<?php else : ?>
 						<p>There are upcoming events!</p>
 					<?php endif; ?>
 				</div>

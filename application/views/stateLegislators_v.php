@@ -45,9 +45,6 @@
 					<?php endif; ?>
 				</div>
 			</div>
-
-
-
 			<div class="row">
 				<div class="col s12 m6">
 					<div class="card teal darken-2">
@@ -55,11 +52,24 @@
 							<span class="card-title"><h3 class="center-align">Party Distribution</h3></span>
 							<div class="divider"></div>
 							<canvas id="legisDonut"></canvas>
-							<span class="activator card-title"><h5>View Details<i class="material-icons right">info_outline</i></h5></span>
+							<span class="activator card-title extraTopMargin">View Details<i class="material-icons right">info_outline</i></span>
 						</div>
 						<div class="card-reveal">
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
-							<p>Here is some more information about this product that is only revealed once clicked on.</p>
+							<div class="grey-text text-darken-4">
+								<p>
+									There is a total of
+										<?php $numItems = count($parties); ?>
+										<?php $i = 0; ?>
+										<?php foreach($parties as $key => $party) : ?>
+											<?php if(++$i === $numItems) : ?>
+												<?php echo 'and ' . count($party) .' ' . $key . 's.' ?>
+											<?php else : ?>
+												<?php echo count($party) .' ' . $key . 's,' ?>
+											<?php endif; ?>
+										<?php endforeach; ?>
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>

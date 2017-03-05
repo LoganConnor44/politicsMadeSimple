@@ -50,14 +50,12 @@
 
 			<div class="row">
 				<div class="col s12 m6">
-					<div class="card teal darken-2 extraBottomMargin">
+					<div class="card teal darken-2">
 						<div class="card-content">
 							<span class="card-title"><h3 class="center-align">Party Distribution</h3></span>
 							<div class="divider"></div>
 							<canvas id="legisDonut"></canvas>
-							<span class="card-title activator btn-floating waves-effect waves-light right">
-								<i class="material-icons" id="infoButtonCenter">info_outline</i>
-							</span>
+							<span class="activator card-title"><h5>View Details<i class="material-icons right">info_outline</i></h5></span>
 						</div>
 						<div class="card-reveal">
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>

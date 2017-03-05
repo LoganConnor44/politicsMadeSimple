@@ -59,6 +59,10 @@ ul.stately {
     padding-bottom: 20px;
 }
 
+.extraBottomMargin{
+    margin-bottom: 25px;
+}
+
 /*Footer Has 20px Extra Padding - Taking It Away*/
 .noTopPadding{
     padding-top: 0px !important;
@@ -76,4 +80,8 @@ select{
 
 #stateSelectLabel{
     color: #e3f2fd;
+}
+
+#infoButtonCenter{
+    line-height: 40px !important;
 }

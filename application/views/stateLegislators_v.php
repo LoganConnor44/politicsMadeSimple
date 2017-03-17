@@ -81,6 +81,24 @@
 							<span class="card-title"><h2 class="center-align">Senate</h2></span>
 							<div class="divider"></div>
 							<canvas id="upperChamberDonut"></canvas>
+							<span class="activator card-title extraTopMargin">View Details<i class="material-icons right">info_outline</i></span>
+						</div>
+						<div class="card-reveal">
+							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
+							<div class="grey-text text-darken-4">
+								<p>
+									There is a total of
+									<?php $numItems = count($partyAndChamber); ?>
+									<?php $i = 0; ?>
+									<?php foreach($partyAndChamber as $party => $officialsData) : ?>
+										<?php if(++$i === $numItems) : ?>
+											<?php echo 'and ' . count($officialsData['upper']) ." $party." ?>
+										<?php else : ?>
+											<?php echo count($officialsData['upper']) ." $party," ?>
+										<?php endif; ?>
+									<?php endforeach; ?>
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -90,6 +108,40 @@
 							<span class="card-title"><h2 class="center-align">House</h2></span>
 							<div class="divider"></div>
 							<canvas id="lowerChamberDonut"></canvas>
+							<span class="activator card-title extraTopMargin">View Details<i class="material-icons right">info_outline</i></span>
+						</div>
+						<div class="card-reveal">
+							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
+							<div class="grey-text text-darken-4">
+								<p>
+									There is a total of
+
+									<?php foreach($partyAndChamber as $party => $officialsData) : ?>
+										<?php $numItems = count($officialsData['lower']); ?>
+										<?php var_dump($officialsData) ?>
+										<?php $i = 0; ?>
+										<?php if(!$officialsData['lower']) : ?>
+											<?php unset($officialsData) ?>
+										<?php endif; ?>
+									<?php endforeach; ?>
+
+									<?php $partyAndChamber->party ?>
+
+									<?php foreach($partyAndChamber as $party => $officialsData) : ?>
+
+											<?php if(++$i === $numItems) : ?>
+
+												<?php echo 'and ' . count($officialsData['lower']) ." $party." ?>
+
+											<?php else : ?>
+
+												<?php echo count($officialsData['lower']) ." $party," ?>
+
+											<?php endif; ?>
+
+									<?php endforeach; ?>
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>

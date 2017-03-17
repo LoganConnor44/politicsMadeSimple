@@ -79,11 +79,39 @@
 			var_dump($sortedByPartyAndChamber);
 		}
 
+		public function testUpper(){
+			$results = $this->legis->getSenateLegislatorsByState('FL');
+			echo "<pre>";
+			print_r($results);
+		}
+
+		public function testSortSenate(){
+			$results = $this->legis->getSenateLegislatorsByState('fl');
+			$parties = $this->legis->getPartiesInApiResponse($results);
+			echo "<pre>";
+			var_dump($this->legis->sortSenatorsByParty($results, $parties));
+		}
+
 		public function testEvents(){
 			$fullResponse = $this->events->getEventsForSelectedState('fl');
 			$result = $this->events->upcomingEvents($fullResponse);
 			$numberOfEvents = $this->events->howManyEvents($fullResponse);
-
 			var_dump($result);
+		}
+
+		public function testSortChamberAndParty(){
+			$apiResponse = $this->legis->getAllLegislatorsByState('fl');
+			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
+			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
+			echo "<pre>";
+			var_dump($sortedByPartyAndChamber);
+		}
+
+		public function testDataError(){
+			$apiResponse = $this->legis->getAllLegislatorsByState('tx');
+			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
+			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
+			echo "<pre>";
+			var_dump($sortedByPartyAndChamber);
 		}
 	}

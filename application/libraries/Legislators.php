@@ -1,4 +1,4 @@
-<?php
+<?php namespace PoliticsMadeSimple;
 	class Legislators{
 
 		protected $baseUrl = 'https://openstates.org/api/v1/legislators/';
@@ -20,6 +20,13 @@
 			return json_decode($apiResponse);
 		}
 
+		/**
+		 * Counts the number of legislators in the upper and lower chambers. Returns the amount as an array.
+		 *
+		 * @param array $fullApiResponse
+		 *
+		 * @return array $chamberCounts
+		 */
 		public function getChamberCounts($fullApiResponse){
 			$chamberCounts = array(
 				'upper' => 0,
@@ -60,6 +67,16 @@
 			return $parties;
 		}
 
+		/*
+		 * Takes the full api response, $fullApiResponse, and the parties found in the state, $partiesInState, then
+		 * iterates through $fullApiResponse and populates a new array if the legislator has a party associated that is
+		 * a party that was passed in as $partiesInState. The returned array is then alphabetically sorted.
+		 *
+		 * @param array of objects $fullApiResponse
+		 * @param array $partiesInState
+		 *
+		 * @return array $sortedLegislatorsByParty
+		 */
 		public function sortAllLegislatorsByParty($fullApiResponse, $partiesInState){
 			$sortedLegislatorsByParty = array();
 			foreach($fullApiResponse as $legislator){
@@ -71,11 +88,28 @@
 			return $sortedLegislatorsByParty;
 		}
 
+		/*
+		 *
+		 */
 		public function getSenateLegislatorsByState($stateAbbrev){
 			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key . $this->and . $this->state . $stateAbbrev .
 				$this->and . $this->chamber . 'upper';
 			$apiResponse = file_get_contents($apiQuery);
 			return json_decode($apiResponse);
+		}
+
+		/*
+		 * Takes the return of getSenateLegislatorsByState(), $senatorsByState, and sorts each by $partiesInState
+		 */
+		public function sortSenatorsByParty($senatorsByState, $partiesInState){
+			$sortedSenatorsByParty = array();
+			foreach($senatorsByState as $electedOfficial){
+				if(in_array($electedOfficial->party, $partiesInState)){
+					$sortedSenatorsByParty[$electedOfficial->party][] = $electedOfficial;
+				}
+			}
+			asort($sortedSenatorsByParty);
+			return $sortedSenatorsByParty;
 		}
 
 		/*
@@ -105,6 +139,4 @@
 			asort($sortedLegislatorsByChamber);
 			return $sortedLegislatorsByChamber;
 		}
-
-
 	}

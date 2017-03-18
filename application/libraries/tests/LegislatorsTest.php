@@ -93,13 +93,6 @@
 		}
 		asort($parties);
 		array_unique($parties);
-		/*foreach ($parties as $party) {
-			$i = 0;
-			$maxResponseIndex = count($sanitizedResponse);
-			while ($i <= $maxResponseIndex) {
-				var_dump(in_array($party, $sanitizedResponse[$i]->party));
-			}
-		}*/
-
+		//put into string and see if there is a substring of parties within the sanitizedresponse
 	}
 }

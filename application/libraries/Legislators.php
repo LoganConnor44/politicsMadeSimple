@@ -43,23 +43,40 @@
 			return $chamberCounts;
 		}
 
-		/*
+		/**
+		 * Removes any legislator data that does not contain a chamber.
+		 *
+		 * @param $fullApiResponse
+		 *
+		 * @return mixed $fullApiResponse
+		 */
+		public function sanitizeFullApiResponse($fullApiResponse){
+			foreach($fullApiResponse as $key => &$legislator) {
+				//if chamber does not exist - delete the data
+				if(!property_exists($legislator, 'chamber')) {
+					unset($fullApiResponse[$key]);
+				}
+				//if party does not exist - set it as 'No Data'
+				if(!isset($legislator->party)){
+					$legislator->party = 'No Data';
+				}
+			}
+			return $fullApiResponse;
+		}
+
+		/**
 		 * Takes a full API response for Legislators and creates a new array with all of the available parties, sorts the
 		 * arrays, and then removes any duplicates.
 		 * NOTE: a known issue is dirty data (specifically Texas) returning Democrat AND Democratic
 		 *
-		 * @param array of objects $fullApiResponse
+		 * @param mixed $sanitizedFullApiResponse
 		 *
 		 * @return array $parties
 		 * @todo find solution for SIMILAR strings in an array
 		 */
-		public function getPartiesInApiResponse($fullApiResponse){
+		public function getPartiesInApiResponse($sanitizedFullApiResponse){
 			$parties = array();
-			foreach($fullApiResponse as &$legis){
-				//if dirty data - party does not exist - set it as 'No Data'
-				if(!isset($legis->party)){
-					$legis->party = 'No Data';
-				}
+			foreach($sanitizedFullApiResponse as &$legis){
 				$parties[trim($legis->party)] = trim($legis->party);
 			}
 			asort($parties);

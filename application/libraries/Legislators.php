@@ -121,10 +121,6 @@
 				'lower',
 			);
 			foreach($fullApiResponse as $legislator){
-				//if dirty data - chamber does not exist - set it as 'No Data'
-				if(!isset($legislator->chamber)){
-					$legislator->chamber = 'No Data';
-				}
 				if(in_array($legislator->party, $parties) && in_array($legislator->chamber, $chambers)){
 					$sortedLegislatorsByChamber[trim($legislator->party)][trim($legislator->chamber)][] = $legislator;
 				}

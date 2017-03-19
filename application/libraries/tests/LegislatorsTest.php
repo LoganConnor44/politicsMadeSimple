@@ -108,4 +108,26 @@
 			$this->assertTrue($evaluate);
 		}
 	}
+
+	/**
+	 * Creates an array that has all legislators sorted by political party as a key value pair.
+	 * Verifies that the sum of all the sorted legislators still equates to the sum of the original array.
+	 */
+	public function testSortAllLegislatorsByParty(){
+		$Legislators = new Legislators();
+		$sanitizedResponse = $Legislators->sanitizeFullApiResponse($this->response);
+		$partiesInState = $Legislators->getPartiesInApiResponse($this->response);
+		$sortedLegislatorsByParty = array();
+		foreach($sanitizedResponse as $legislator){
+			if(in_array($legislator->party, $partiesInState)){
+				$sortedLegislatorsByParty[$legislator->party][] = $legislator;
+			}
+		}
+		asort($sortedLegislatorsByParty);
+		$countingArray = array();
+		foreach ($sortedLegislatorsByParty as $party => $legislatorsByParty) {
+			$countingArray[$party] = count($legislatorsByParty);
+		}
+		$this->assertEquals(array_sum($countingArray), count($sanitizedResponse));
+	}
 }

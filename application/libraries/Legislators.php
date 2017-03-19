@@ -21,29 +21,6 @@
 		}
 
 		/**
-		 * Counts the number of legislators in the upper and lower chambers. Returns the amount as an array.
-		 *
-		 * @param array $fullApiResponse
-		 *
-		 * @return array $chamberCounts
-		 */
-		public function getChamberCounts($fullApiResponse){
-			$chamberCounts = array(
-				'upper' => 0,
-				'lower' => 0
-			);
-			foreach($fullApiResponse as $legis){
-				if($legis->chamber === 'upper'){
-					$chamberCounts['upper']++;
-				}
-				if($legis->chamber === 'lower'){
-					$chamberCounts['lower']++;
-				}
-			}
-			return $chamberCounts;
-		}
-
-		/**
 		 * Removes any legislator data that does not contain a chamber.
 		 *
 		 * @param $fullApiResponse
@@ -62,6 +39,29 @@
 				}
 			}
 			return $fullApiResponse;
+		}
+
+		/**
+		 * Counts the number of legislators in the upper and lower chambers. Returns the amount as an array.
+		 *
+		 * @param array $sanitizedFullApiResponse
+		 *
+		 * @return array $chamberCounts
+		 */
+		public function getChamberCounts($sanitizedFullApiResponse){
+			$chamberCounts = array(
+				'upper' => 0,
+				'lower' => 0
+			);
+			foreach($sanitizedFullApiResponse as $legis){
+				if($legis->chamber === 'upper'){
+					$chamberCounts['upper']++;
+				}
+				if($legis->chamber === 'lower'){
+					$chamberCounts['lower']++;
+				}
+			}
+			return $chamberCounts;
 		}
 
 		/**
@@ -84,49 +84,25 @@
 			return $parties;
 		}
 
-		/*
+		/**
 		 * Takes the full api response, $fullApiResponse, and the parties found in the state, $partiesInState, then
 		 * iterates through $fullApiResponse and populates a new array if the legislator has a party associated that is
 		 * a party that was passed in as $partiesInState. The returned array is then alphabetically sorted.
 		 *
-		 * @param array of objects $fullApiResponse
+		 * @param mixed $sanitizedResponse
 		 * @param array $partiesInState
 		 *
-		 * @return array $sortedLegislatorsByParty
+		 * @return array $sortedLegislatorsByParty[PARTY][LEGISLATOR OBJECT]
 		 */
-		public function sortAllLegislatorsByParty($fullApiResponse, $partiesInState){
+		public function sortAllLegislatorsByParty($sanitizedResponse, $partiesInState){
 			$sortedLegislatorsByParty = array();
-			foreach($fullApiResponse as $legislator){
+			foreach($sanitizedResponse as $legislator){
 				if(in_array($legislator->party, $partiesInState)){
 					$sortedLegislatorsByParty[$legislator->party][] = $legislator;
 				}
 			}
 			asort($sortedLegislatorsByParty);
 			return $sortedLegislatorsByParty;
-		}
-
-		/*
-		 *
-		 */
-		public function getSenateLegislatorsByState($stateAbbrev){
-			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key . $this->and . $this->state . $stateAbbrev .
-				$this->and . $this->chamber . 'upper';
-			$apiResponse = file_get_contents($apiQuery);
-			return json_decode($apiResponse);
-		}
-
-		/*
-		 * Takes the return of getSenateLegislatorsByState(), $senatorsByState, and sorts each by $partiesInState
-		 */
-		public function sortSenatorsByParty($senatorsByState, $partiesInState){
-			$sortedSenatorsByParty = array();
-			foreach($senatorsByState as $electedOfficial){
-				if(in_array($electedOfficial->party, $partiesInState)){
-					$sortedSenatorsByParty[$electedOfficial->party][] = $electedOfficial;
-				}
-			}
-			asort($sortedSenatorsByParty);
-			return $sortedSenatorsByParty;
 		}
 
 		/*
@@ -156,4 +132,30 @@
 			asort($sortedLegislatorsByChamber);
 			return $sortedLegislatorsByChamber;
 		}
+
+		/*
+		 *
+		 */
+		public function getSenateLegislatorsByState($stateAbbrev){
+			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key . $this->and . $this->state . $stateAbbrev .
+				$this->and . $this->chamber . 'upper';
+			$apiResponse = file_get_contents($apiQuery);
+			return json_decode($apiResponse);
+		}
+
+		/*
+		 * Takes the return of getSenateLegislatorsByState(), $senatorsByState, and sorts each by $partiesInState
+		 */
+		public function sortSenatorsByParty($senatorsByState, $partiesInState){
+			$sortedSenatorsByParty = array();
+			foreach($senatorsByState as $electedOfficial){
+				if(in_array($electedOfficial->party, $partiesInState)){
+					$sortedSenatorsByParty[$electedOfficial->party][] = $electedOfficial;
+				}
+			}
+			asort($sortedSenatorsByParty);
+			return $sortedSenatorsByParty;
+		}
+
+
 	}

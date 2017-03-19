@@ -130,4 +130,33 @@
 		}
 		$this->assertEquals(array_sum($countingArray), count($sanitizedResponse));
 	}
+
+	/**
+	 * Creates an array that has all legislators sorted by political party AND chamber as a key value pair.
+	 * E.G. $sortedLegislatorsByChamber[PARTY][CHAMBER][LEGISLATOR OBJECT]
+	 * Verifies that the number of sorted elements equals the number of elements in $sanitizedResponse
+	 */
+	public function testSortChamber(){
+		$Legislators = new Legislators();
+		$sanitizedResponse = $Legislators->sanitizeFullApiResponse($this->response);
+		$partiesInState = $Legislators->getPartiesInApiResponse($this->response);
+		$sortedLegislatorsByChamber = array();
+		$chambers = array(
+			'upper',
+			'lower',
+		);
+		foreach ($sanitizedResponse as $legislator) {
+			if (in_array($legislator->party, $partiesInState) && in_array($legislator->chamber, $chambers)) {
+				$sortedLegislatorsByChamber[trim($legislator->party)][trim($legislator->chamber)][] = $legislator;
+			}
+		}
+		asort($sortedLegislatorsByChamber);
+		$sortCount = 0;
+		foreach ($sortedLegislatorsByChamber as $party) {
+			foreach ($party as $chamber) {
+				$sortCount += count($chamber);
+			}
+		}
+		$this->assertEquals($sortCount, count($sanitizedResponse));
+	}
 }

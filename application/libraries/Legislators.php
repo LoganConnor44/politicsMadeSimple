@@ -105,22 +105,22 @@
 			return $sortedLegislatorsByParty;
 		}
 
-		/*
+		/**
 		 * Takes a full API response for Legislators and returns a multidimensional array with the parent levels being the
 		 * party of the legislator and the children level being the chamber they belong to.
 		 *
-		 * @param array of objects $fullApiResponse
+		 * @param mixed $sanitizedResponse
 		 * @param array $parties
 		 *
 		 * @return array $sortedLegislatorsByChamber[PARTY][CHAMBER][LEGISLATOR OBJECT]
 		 */
-		public function sortChamber($fullApiResponse, $parties){
+		public function sortChamber($sanitizedResponse, $parties){
 			$sortedLegislatorsByChamber = array();
 			$chambers = array(
 				'upper',
 				'lower',
 			);
-			foreach($fullApiResponse as $legislator){
+			foreach($sanitizedResponse as $legislator){
 				if(in_array($legislator->party, $parties) && in_array($legislator->chamber, $chambers)){
 					$sortedLegislatorsByChamber[trim($legislator->party)][trim($legislator->chamber)][] = $legislator;
 				}
@@ -129,8 +129,33 @@
 			return $sortedLegislatorsByChamber;
 		}
 
-		/*
+		/**
+		 * Takes the return from sortChamber() and creates a new mixed array with only the upper chamber legislator data.
+		 * E.G. $upperChamberLegislators[PARTY]['upper'][LEGISLATOR OBJECT]
 		 *
+		 * NOTE: This function is a convenience function the data is already stored in the return of sortChamber()
+		 *
+		 * @param $sanitizedResponse
+		 * @param $partiesInSate
+		 * @param $sortedByChamber
+		 *
+		 * @return array
+		 */
+		public function getUpperChamberByState($sanitizedResponse, $partiesInSate, $sortedByChamber) {
+			$upperChamberLegislators = array();
+			foreach ($sortedByChamber as $party => $chamberValue) {
+				if (isset($sortedByChamber[$party]['upper'])) {
+					$upperChamberLegislators[$party] = $sortedByChamber[$party]['upper'];
+				}
+			}
+			return $upperChamberLegislators;
+		}
+
+
+		/*
+		 * Depreciated
+		 * This was an extra call that didn't need to be implemented
+		 * Use getUpperChamberByState() instead
 		 */
 		public function getSenateLegislatorsByState($stateAbbrev){
 			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key . $this->and . $this->state . $stateAbbrev .

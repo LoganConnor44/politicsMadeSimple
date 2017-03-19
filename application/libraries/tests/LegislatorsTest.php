@@ -135,6 +135,8 @@
 	 * Creates an array that has all legislators sorted by political party AND chamber as a key value pair.
 	 * E.G. $sortedLegislatorsByChamber[PARTY][CHAMBER][LEGISLATOR OBJECT]
 	 * Verifies that the number of sorted elements equals the number of elements in $sanitizedResponse
+	 *
+	 * NOTE: This could be refactored to not use foreach within a foreach
 	 */
 	public function testSortChamber(){
 		$Legislators = new Legislators();
@@ -159,4 +161,66 @@
 		}
 		$this->assertEquals($sortCount, count($sanitizedResponse));
 	}
+
+	/**
+	 * Takes the return from sortChamber() and creates a new mixed array with only the upper chamber legislator data.
+	 * E.G. $upperChamberLegislators[PARTY]['upper'][LEGISLATOR OBJECT]
+	 * Verifies that the newly created array matches the original array, $sanitizedResponse
+	 */
+	public function testGetUpperChamberByState() {
+		$Legislators = new Legislators();
+		$sanitizedResponse = $Legislators->sanitizeFullApiResponse($this->response);
+		$partiesInState = $Legislators->getPartiesInApiResponse($this->response);
+		$sortedByChamber = $Legislators->sortChamber($sanitizedResponse, $partiesInState);
+		$upperChamberLegislators = array();
+		foreach ($sortedByChamber as $party => $chamberValue) {
+			if (isset($sortedByChamber[$party]['upper'])) {
+				$upperChamberLegislators[$party] = $sortedByChamber[$party]['upper'];
+			}
+		}
+		$sanitizedResponseUpperCount = 0;
+		foreach ($sanitizedResponse as $legislator) {
+			if(isset($legislator->chamber) && $legislator->chamber === 'upper') {
+				$sanitizedResponseUpperCount++;
+			}
+		}
+		$numberOfUpperChamber = count($upperChamberLegislators, 1) - count($upperChamberLegislators);
+		$this->assertEquals($numberOfUpperChamber, $sanitizedResponseUpperCount);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

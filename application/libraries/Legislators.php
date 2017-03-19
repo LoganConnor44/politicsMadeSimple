@@ -136,12 +136,12 @@
 		 * NOTE: This function is a convenience function the data is already stored in the return of sortChamber()
 		 *
 		 * @param $sanitizedResponse
-		 * @param $partiesInSate
-		 * @param $sortedByChamber
+		 * @param $partiesInState
 		 *
 		 * @return array
 		 */
-		public function getUpperChamberByState($sanitizedResponse, $partiesInSate, $sortedByChamber) {
+		public function getUpperChamberByState($sanitizedResponse, $partiesInState) {
+			$sortedByChamber = $this->sortChamber($sanitizedResponse, $partiesInState);
 			$upperChamberLegislators = array();
 			foreach ($sortedByChamber as $party => $chamberValue) {
 				if (isset($sortedByChamber[$party]['upper'])) {
@@ -150,7 +150,6 @@
 			}
 			return $upperChamberLegislators;
 		}
-
 
 		/*
 		 * Depreciated

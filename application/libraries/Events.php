@@ -1,6 +1,4 @@
-<?php
-	namespace PoliticsMadeSimple\Events;
-
+<?php namespace PoliticsMadeSimple;
 	class Events{
 
 		protected $baseUrl = 'https://openstates.org/api/v1/events/';

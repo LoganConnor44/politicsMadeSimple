@@ -84,6 +84,9 @@
 		$this->assertEquals($totalNumberOfLegislators, $sumOfChambers);
 	}
 
+	/**
+	 * Verifies that the data in the response matches the extracted, unique values.
+	 */
 	public function testGetPartiesInApiResponse() {
 		$Legislators = new Legislators();
 		$sanitizedResponse = $Legislators->sanitizeFullApiResponse($this->response);
@@ -93,6 +96,16 @@
 		}
 		asort($parties);
 		array_unique($parties);
-		//put into string and see if there is a substring of parties within the sanitizedresponse
+		$partiesInString = '';
+		foreach ($parties as $party) {
+			$partiesInString .= ' ' . $party;
+		}
+		foreach ($sanitizedResponse as $legislator) {
+			$evaluate = FALSE;
+			if (strpos($partiesInString, $legislator->party)) {
+				$evaluate = TRUE;
+			}
+			$this->assertTrue($evaluate);
+		}
 	}
 }

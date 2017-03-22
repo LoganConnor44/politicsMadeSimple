@@ -188,39 +188,21 @@
 		$this->assertEquals($numberOfUpperChamber, $sanitizedResponseUpperCount);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	public function testCountUpperChamber() {
+		$Legislators = new Legislators();
+		$sanitizedResponse = $Legislators->sanitizeFullApiResponse($this->response);
+		$partiesInState = $Legislators->getPartiesInApiResponse($this->response);
+		$upperChamber = $Legislators->getUpperChamberByState($sanitizedResponse, $partiesInState);
+		$numberOfParties = count($upperChamber);
+		echo PHP_EOL;
+		$numberOfUppers = count($upperChamber, 1) - $numberOfParties;
+		$count = 0;
+		foreach ($sanitizedResponse as $legislator) {
+			if (isset($legislator->chamber) && $legislator->chamber === 'upper') {
+				$count++;
+			}
+		}
+		echo PHP_EOL;
+		$this->assertTrue($numberOfUppers - $count === 0);
+	}
 }

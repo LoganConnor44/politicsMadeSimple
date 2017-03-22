@@ -58,7 +58,8 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
-									There is a total of <? echo count()+count() . ' ' . $stateDetail->legislature_name.'s'?>
+									There is a total of <? echo $totalLegislators . ' ' . $stateDetail->legislature_name.'s.'?>
+									Which is made up of
 										<?php $numItems = count($parties); ?>
 										<?php $i = 0; ?>
 										<?php foreach($parties as $key => $party) : ?>
@@ -87,7 +88,7 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
-									There is a total of
+									There is a total of <?php echo count($upperChamber, 1) ?>
 									<?php $numItems = count($partyAndChamber); ?>
 									<?php $i = 0; ?>
 									<?php foreach($partyAndChamber as $party => $officialsData) : ?>

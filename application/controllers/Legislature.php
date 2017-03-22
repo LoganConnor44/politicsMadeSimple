@@ -33,6 +33,7 @@
 			$doesLowerChamberExist = $this->states->doesLowerChamberExist($stateDetail);
 			$htmlChamberResponse = $this->formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist,
 				$stateDetail, $chamberCounts);
+			$upperChamber = $Legislators->getUpperChamberByState($sanitizedResponse, $legisParties);
 
 			$data = array(
 				'stateDetail' => $stateDetail,
@@ -45,7 +46,8 @@
 				'numberOfEvents' => $numberOfEvents,
 				'htmlChamberResponse' => $htmlChamberResponse,
 				'landingPage' => FALSE,
-				'partyAndChamber' => $sortedByPartyAndChamber
+				'partyAndChamber' => $sortedByPartyAndChamber,
+				'upperChamber' => $upperChamber
 			);
 			$this->load->view('stateLegislators_v', $data);
 		}

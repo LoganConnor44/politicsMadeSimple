@@ -1,7 +1,17 @@
 <?php
 
+	require __DIR__ . '/../libraries/Legislators.php';
+
+	use PoliticsMadeSimple\Legislators;
+
 	Class Simple_m extends CI_Model
 	{
+		public $Legislators;
+
+		public function __construct() {
+			$this->Legislators = new Legislators();
+		}
+
 		public function getStateData($stateId)
 		{
 			$iface = "/State.getState";

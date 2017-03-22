@@ -8,8 +8,8 @@
 		public function __construct(){
 			parent::__construct();
 			$this->load->helper('url');
+			$this->load->model('simple_m');
 			$this->load->library(array(
-				'legislators' => 'legis',
 				'states' => 'states',
 				'events' => 'events'
 			));
@@ -18,12 +18,13 @@
 		public function index(){
 			$this->userDefinedState = $this->input->post('stateSelect');
 			$state = $this->states->linkAbbrevToStateFullName($this->userDefinedState);
-			$apiResponse = $this->legis->getAllLegislatorsByState($this->userDefinedState);
-			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
-			$sortedParties = $this->legis->sortAllLegislatorsByParty($apiResponse, $legisParties);
-			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
+			$Legislators = new PoliticsMadeSimple\Legislators();
+			$apiResponse = $Legislators->getAllLegislatorsByState($this->userDefinedState);
+			$legisParties = $Legislators->getPartiesInApiResponse($apiResponse);
+			$sortedParties = $Legislators->sortAllLegislatorsByParty($apiResponse, $legisParties);
+			$sortedByPartyAndChamber = $Legislators->sortChamber($apiResponse, $legisParties);
 			$stateDetail = $this->states->getStateDetail($this->userDefinedState);
-			$chamberCounts = $this->legis->getChamberCounts($apiResponse);
+			$chamberCounts = $Legislators->getChamberCounts($apiResponse);
 			$upcomingEvents = $this->events->getEventsForSelectedState($this->userDefinedState);
 			$isThereAnUpcomingEvent = $this->events->upcomingEvents($upcomingEvents);
 			$isThereAnUpcomingEvent ? $numberOfEvents = $this->events->howManyEvents($upcomingEvents) : $numberOfEvents = FALSE;
@@ -71,7 +72,7 @@
 			return $htmlResponse;
 		}
 
-		public function test(){
+		/*public function test(){
 			$apiResponse = $this->legis->getAllLegislatorsByState('tx');
 			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
 			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
@@ -113,5 +114,5 @@
 			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
 			echo "<pre>";
 			var_dump($sortedByPartyAndChamber);
-		}
+		}*/
 	}

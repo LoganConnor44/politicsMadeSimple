@@ -8,7 +8,6 @@
 			$this->load->helper('url');
 			$this->load->library(array(
 				'officials' => 'offs',
-				'legislators' => 'legis',
 				'states' => 'states',
 				'events' => 'events'
 			));

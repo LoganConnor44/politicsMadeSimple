@@ -20,11 +20,12 @@
 			$state = $this->states->linkAbbrevToStateFullName($this->userDefinedState);
 			$Legislators = new PoliticsMadeSimple\Legislators();
 			$apiResponse = $Legislators->getAllLegislatorsByState($this->userDefinedState);
-			$legisParties = $Legislators->getPartiesInApiResponse($apiResponse);
-			$sortedParties = $Legislators->sortAllLegislatorsByParty($apiResponse, $legisParties);
-			$sortedByPartyAndChamber = $Legislators->sortChamber($apiResponse, $legisParties);
+			$sanitizedResponse = $Legislators->sanitizeFullApiResponse($apiResponse);
+			$legisParties = $Legislators->getPartiesInApiResponse($sanitizedResponse);
+			$sortedParties = $Legislators->sortAllLegislatorsByParty($sanitizedResponse, $legisParties);
+			$sortedByPartyAndChamber = $Legislators->sortChamber($sanitizedResponse, $legisParties);
 			$stateDetail = $this->states->getStateDetail($this->userDefinedState);
-			$chamberCounts = $Legislators->getChamberCounts($apiResponse);
+			$chamberCounts = $Legislators->getChamberCounts($sanitizedResponse);
 			$upcomingEvents = $this->events->getEventsForSelectedState($this->userDefinedState);
 			$isThereAnUpcomingEvent = $this->events->upcomingEvents($upcomingEvents);
 			$isThereAnUpcomingEvent ? $numberOfEvents = $this->events->howManyEvents($upcomingEvents) : $numberOfEvents = FALSE;
@@ -38,7 +39,7 @@
 				'userDefinedState' => strtoupper($this->userDefinedState),
 				'selectedState' => $state,
 				'parties' => $sortedParties,
-				'totalLegislators' => count($apiResponse),
+				'totalLegislators' => count($sanitizedResponse),
 				'civicDataBy' => $this->civicDataBy,
 				'isThereAnUpcomingEvent' => $isThereAnUpcomingEvent,
 				'numberOfEvents' => $numberOfEvents,

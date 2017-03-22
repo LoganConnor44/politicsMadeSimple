@@ -58,7 +58,7 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
-									There is a total of
+									There is a total of <? echo count()+count() . ' ' . $stateDetail->legislature_name.'s'?>
 										<?php $numItems = count($parties); ?>
 										<?php $i = 0; ?>
 										<?php foreach($parties as $key => $party) : ?>

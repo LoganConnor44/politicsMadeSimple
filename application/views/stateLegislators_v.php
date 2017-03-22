@@ -88,6 +88,7 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
+									<!-- Fix This count for uppers there is a atest already written-->
 									There is a total of <?php echo count($upperChamber, 1) ?>
 									<?php $numItems = count($partyAndChamber); ?>
 									<?php $i = 0; ?>

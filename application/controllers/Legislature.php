@@ -99,21 +99,31 @@
 					break;
 				case 'UPPER_CHAMBER' :
 					foreach($sortedParties as $party => $officialsData) {
+						if (isset($officialsData['upper'])) {
+							$countOfData = count($officialsData['upper']);
+						} else {
+							$countOfData = 0;
+						}
 						if ($i >= 2) {
-							$htmlString .= count($officialsData['upper']) . ' ' . $party . 's, ';
+							$htmlString .= $countOfData . ' ' . $party . 's, ';
 							$i--;
 						} else {
-							$htmlString .= ' and ' . count($officialsData['upper']) . ' ' . $party . 's';
+							$htmlString .= ' and ' . $countOfData . ' ' . $party . 's';
 						}
 					}
 					break;
 				case 'LOWER_CHAMBER' :
 					foreach($sortedParties as $party => $officialsData) {
+						if (isset($officialsData['lower'])) {
+							$countOfData = count($officialsData['lower']);
+						} else {
+							$countOfData = 0;
+						}
 						if ($i >= 2) {
-							$htmlString .= count($officialsData['lower']) . ' ' . $party . 's, ';
+							$htmlString .= $countOfData . ' ' . $party . 's, ';
 							$i--;
 						} else {
-							$htmlString .= ' and ' . count($officialsData['lower']) . ' ' . $party . 's';
+							$htmlString .= ' and ' . $countOfData . ' ' . $party . 's';
 						}
 					}
 					break;

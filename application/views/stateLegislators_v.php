@@ -98,7 +98,7 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
-									There is a total of
+									There is a total of NEED_TO_CREATE_COUNT_LOWER_CHAMBER_METHOD
                                     Which is made up of <?php echo $lowerChamberHtml ?>.
 								</p>
 							</div>

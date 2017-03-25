@@ -35,7 +35,9 @@
 				$stateDetail, $chamberCounts);
 			$upperChamber = $Legislators->getUpperChamberByState($sanitizedResponse, $legisParties);
 			$numberOfUpperLegislators = $Legislators->countUpperChamber($upperChamber);
-			$partyDistributionHtml = $this->formatHtmlPartyDistribution($sortedParties);
+			$partyDistributionHtml = $this->formatHtmlPartyDistribution($sortedParties, 'PARTY_DISTRIBUTION');
+			$upperChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'UPPER_CHAMBER');
+			$lowerChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'LOWER_CHAMBER');
 
 			$data = array(
 				'stateDetail' => $stateDetail,
@@ -51,7 +53,9 @@
 				'partyAndChamber' => $sortedByPartyAndChamber,
 				'upperChamber' => $upperChamber,
 				'numberOfUpperLegislators' => $numberOfUpperLegislators,
-				'partyDistribution' => $partyDistributionHtml
+				'partyDistribution' => $partyDistributionHtml,
+				'upperChamberHtml' => $upperChamberHtml,
+				'lowerChamberHtml' => $lowerChamberHtml
 			);
 			$this->load->view('stateLegislators_v', $data);
 		}
@@ -79,16 +83,40 @@
 			return $htmlResponse;
 		}
 
-		public function formatHtmlPartyDistribution($sortedParties) {
+		public function formatHtmlPartyDistribution(array $sortedParties, string $viewElement) {
 			$htmlString = '';
 			$i = count($sortedParties);
-			foreach ($sortedParties as $key => $party) {
-				if ($i >= 2) {
-					$htmlString .= count($party) .' ' . $key . 's, ';
-					$i--;
-				} else {
-					$htmlString .= ' and ' . count($party) .' ' . $key . 's';
-				}
+			switch ($viewElement) {
+				case 'PARTY_DISTRIBUTION' :
+					foreach ($sortedParties as $party => $officialsData) {
+						if ($i >= 2) {
+							$htmlString .= count($officialsData) .' ' . $party . 's, ';
+							$i--;
+						} else {
+							$htmlString .= ' and ' . count($officialsData) .' ' . $party . 's';
+						}
+					}
+					break;
+				case 'UPPER_CHAMBER' :
+					foreach($sortedParties as $party => $officialsData) {
+						if ($i >= 2) {
+							$htmlString .= count($officialsData['upper']) . ' ' . $party . 's, ';
+							$i--;
+						} else {
+							$htmlString .= ' and ' . count($officialsData['upper']) . ' ' . $party . 's';
+						}
+					}
+					break;
+				case 'LOWER_CHAMBER' :
+					foreach($sortedParties as $party => $officialsData) {
+						if ($i >= 2) {
+							$htmlString .= count($officialsData['lower']) . ' ' . $party . 's, ';
+							$i--;
+						} else {
+							$htmlString .= ' and ' . count($officialsData['lower']) . ' ' . $party . 's';
+						}
+					}
+					break;
 			}
 			return $htmlString;
 		}

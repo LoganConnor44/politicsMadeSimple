@@ -44,7 +44,7 @@
 
 		public function linkAbbrevToStateFullName($strAbbrev){
 			$localStatesJson = json_decode(file_get_contents(base_url('assets/json/states.json')));
-			$state[strtoupper($strAbbrev)] = $localStatesJson->$strAbbrev;
+			$state[strtoupper($strAbbrev)] = $localStatesJson->{$strAbbrev};
 			return $state;
 		}
 

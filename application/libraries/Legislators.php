@@ -151,6 +151,21 @@
 			return $upperChamberLegislators;
 		}
 
+		/**
+		 * Takes the array $upperChamberLegislators[PARTY][CHAMBER][LEGISLATOR OBJECT]
+		 * This array is then counted to see how many parties are stored, then it counts the next level down, Chamber.
+		 * The difference of these two amounts indicates how many legislators are in the upper chamber.
+		 *
+		 * @param mixed $upperChamberLegislators
+		 *
+		 * @return int $correctNumberOfUppers
+		 */
+		public function countUpperChamber($upperChamberLegislators) {
+			$numberOfParties = count($upperChamberLegislators);
+			$correctNumberOfUppers = count($upperChamberLegislators, 1) - $numberOfParties;
+			return $correctNumberOfUppers;
+		}
+
 		/*
 		 * Depreciated
 		 * This was an extra call that didn't need to be implemented

@@ -188,13 +188,19 @@
 		$this->assertEquals($numberOfUpperChamber, $sanitizedResponseUpperCount);
 	}
 
+	/**
+	 * Takes the array $upperChamberLegislators[PARTY][CHAMBER][LEGISLATOR OBJECT]
+	 * This array is then counted to see how many parties are stored, then it counts the next level down, Chamber. The
+	 * difference of these two amounts indicates how many legislators are in the upper chamber.
+	 * Verifies by having a counter starting at zero and only incrementing when the chamber is set and it is set to
+	 * 'upper'.
+	 */
 	public function testCountUpperChamber() {
 		$Legislators = new Legislators();
 		$sanitizedResponse = $Legislators->sanitizeFullApiResponse($this->response);
 		$partiesInState = $Legislators->getPartiesInApiResponse($this->response);
 		$upperChamber = $Legislators->getUpperChamberByState($sanitizedResponse, $partiesInState);
 		$numberOfParties = count($upperChamber);
-		echo PHP_EOL;
 		$numberOfUppers = count($upperChamber, 1) - $numberOfParties;
 		$count = 0;
 		foreach ($sanitizedResponse as $legislator) {
@@ -202,7 +208,6 @@
 				$count++;
 			}
 		}
-		echo PHP_EOL;
 		$this->assertTrue($numberOfUppers - $count === 0);
 	}
 }

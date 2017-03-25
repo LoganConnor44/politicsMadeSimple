@@ -34,6 +34,8 @@
 			$htmlChamberResponse = $this->formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist,
 				$stateDetail, $chamberCounts);
 			$upperChamber = $Legislators->getUpperChamberByState($sanitizedResponse, $legisParties);
+			$numberOfUpperLegislators = $Legislators->countUpperChamber($upperChamber);
+			$partyDistributionHtml = $this->formatHtmlPartyDistribution($sortedParties);
 
 			$data = array(
 				'stateDetail' => $stateDetail,
@@ -47,7 +49,9 @@
 				'htmlChamberResponse' => $htmlChamberResponse,
 				'landingPage' => FALSE,
 				'partyAndChamber' => $sortedByPartyAndChamber,
-				'upperChamber' => $upperChamber
+				'upperChamber' => $upperChamber,
+				'numberOfUpperLegislators' => $numberOfUpperLegislators,
+				'partyDistribution' => $partyDistributionHtml
 			);
 			$this->load->view('stateLegislators_v', $data);
 		}
@@ -73,6 +77,20 @@
 			}
 
 			return $htmlResponse;
+		}
+
+		public function formatHtmlPartyDistribution($sortedParties) {
+			$htmlString = '';
+			$i = count($sortedParties);
+			foreach ($sortedParties as $key => $party) {
+				if ($i >= 2) {
+					$htmlString .= count($party) .' ' . $key . 's, ';
+					$i--;
+				} else {
+					$htmlString .= ' and ' . count($party) .' ' . $key . 's';
+				}
+			}
+			return $htmlString;
 		}
 
 		/*public function test(){

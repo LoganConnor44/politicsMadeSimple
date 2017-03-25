@@ -59,16 +59,7 @@
 							<div class="grey-text text-darken-4">
 								<p>
 									There is a total of <? echo $totalLegislators . ' ' . $stateDetail->legislature_name.'s.'?>
-									Which is made up of
-										<?php $numItems = count($parties); ?>
-										<?php $i = 0; ?>
-										<?php foreach($parties as $key => $party) : ?>
-											<?php if(++$i === $numItems) : ?>
-												<?php echo 'and ' . count($party) .' ' . $key . 's.' ?>
-											<?php else : ?>
-												<?php echo count($party) .' ' . $key . 's,' ?>
-											<?php endif; ?>
-										<?php endforeach; ?>
+									Which is made up of <?php echo $partyDistribution ?>.
 								</p>
 							</div>
 						</div>
@@ -88,8 +79,8 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
-									<!-- Fix This count for uppers there is a atest already written-->
-									There is a total of <?php echo count($upperChamber, 1) ?>
+									There is a total of <?php echo $numberOfUpperLegislators . ' senators.' ?>
+									Which is made up of
 									<?php $numItems = count($partyAndChamber); ?>
 									<?php $i = 0; ?>
 									<?php foreach($partyAndChamber as $party => $officialsData) : ?>

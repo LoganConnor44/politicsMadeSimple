@@ -80,16 +80,7 @@
 							<div class="grey-text text-darken-4">
 								<p>
 									There is a total of <?php echo $numberOfUpperLegislators . ' senators.' ?>
-									Which is made up of
-									<?php $numItems = count($partyAndChamber); ?>
-									<?php $i = 0; ?>
-									<?php foreach($partyAndChamber as $party => $officialsData) : ?>
-										<?php if(++$i === $numItems) : ?>
-											<?php echo 'and ' . count($officialsData['upper']) ." $party." ?>
-										<?php else : ?>
-											<?php echo count($officialsData['upper']) ." $party," ?>
-										<?php endif; ?>
-									<?php endforeach; ?>
+									Which is made up of <?php echo $upperChamberHtml ?>.
 								</p>
 							</div>
 						</div>
@@ -108,31 +99,7 @@
 							<div class="grey-text text-darken-4">
 								<p>
 									There is a total of
-
-									<?php foreach($partyAndChamber as $party => $officialsData) : ?>
-										<?php $numItems = count($officialsData['lower']); ?>
-										<?php var_dump($officialsData) ?>
-										<?php $i = 0; ?>
-										<?php if(!$officialsData['lower']) : ?>
-											<?php unset($officialsData) ?>
-										<?php endif; ?>
-									<?php endforeach; ?>
-
-									<?php $partyAndChamber->party ?>
-
-									<?php foreach($partyAndChamber as $party => $officialsData) : ?>
-
-											<?php if(++$i === $numItems) : ?>
-
-												<?php echo 'and ' . count($officialsData['lower']) ." $party." ?>
-
-											<?php else : ?>
-
-												<?php echo count($officialsData['lower']) ." $party," ?>
-
-											<?php endif; ?>
-
-									<?php endforeach; ?>
+                                    Which is made up of <?php echo $lowerChamberHtml ?>.
 								</p>
 							</div>
 						</div>

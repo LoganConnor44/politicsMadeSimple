@@ -147,17 +147,20 @@
 			$result = $this->events->upcomingEvents($fullResponse);
 			$numberOfEvents = $this->events->howManyEvents($fullResponse);
 			var_dump($result);
-		}
+		}*/
 
 		public function testSortChamberAndParty(){
-			$apiResponse = $this->legis->getAllLegislatorsByState('fl');
-			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
-			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
+			$Legislature = new PoliticsMadeSimple\Legislators();
+			$apiResponse = $Legislature->getAllLegislatorsByState('fl');
+			$legisParties = $Legislature->getPartiesInApiResponse($apiResponse);
+			$sortedByPartyAndChamber = $Legislature->sortChamber($apiResponse, $legisParties);
 			echo "<pre>";
-			var_dump($sortedByPartyAndChamber);
+			foreach ($sortedByPartyAndChamber as $party => $data) {
+				var_dump($data['lower']);
+			}
 		}
 
-		public function testDataError(){
+		/*public function testDataError(){
 			$apiResponse = $this->legis->getAllLegislatorsByState('tx');
 			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
 			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);

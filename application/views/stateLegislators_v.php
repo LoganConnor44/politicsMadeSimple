@@ -58,7 +58,7 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
-									There is a total of <? echo $totalLegislators . ' ' . $stateDetail->legislature_name.'s.'?>
+									There is a total of <? echo $totalLegislators . ' ' . $stateDetail->legislature_name.' members.'?>
 									Which is made up of <?php echo $partyDistribution ?>.
 								</p>
 							</div>
@@ -79,8 +79,8 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
-									There is a total of <?php echo $numberOfUpperLegislators . ' senators.' ?>
-									Which is made up of <?php echo $upperChamberHtml ?>.
+									<?php echo $stateFullName ?> has a total of <?php echo $numberOfUpper . ' Senators.' ?>
+									Which is further made up of <?php echo $upperChamberHtml ?>.
 								</p>
 							</div>
 						</div>
@@ -98,8 +98,8 @@
 							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
 							<div class="grey-text text-darken-4">
 								<p>
-									There is a total of NEED_TO_CREATE_COUNT_LOWER_CHAMBER_METHOD
-                                    Which is made up of <?php echo $lowerChamberHtml ?>.
+									<?php echo $stateFullName ?> has a total of <?php echo $numberOfLower . ' Representatives.' ?>
+                                    Which is further made up of <?php echo $lowerChamberHtml ?>.
 								</p>
 							</div>
 						</div>
@@ -132,9 +132,9 @@
 					<?php echo count($party) ?>,
 					<?php endforeach; ?>],
 				backgroundColor: [
-					'rgba(68,138,255,0.75)',
-					'rgba(255,82,82,0.75)',
-					'rgba(0,230,118,0.75)',
+					'rgba(68,138,255,0.95)',
+					'rgba(255,82,82,0.95)',
+					'rgba(0,230,118,0.95)',
 					'rgba(75, 192, 192, 0.5)',
 					'rgba(153, 102, 255, 0.5)',
 					'rgba(255, 159, 64, 0.5)'
@@ -163,7 +163,7 @@
 <script>
 	var upperD = document.getElementById("upperChamberDonut");
 	var upperChamberDonut = new Chart(upperD, {
-		type: 'doughnut',
+		type: 'polarArea',
 		data:{
 			labels: [<?php foreach($partyAndChamber as $party => $chamber['upper']) : ?>
 				'<?php echo $party ?>',
@@ -205,13 +205,13 @@
 <script>
 	var lowerD = document.getElementById("lowerChamberDonut");
 	var lowerChamberDonut = new Chart(lowerD, {
-		type: 'doughnut',
+		type: 'bar',
 		data:{
 			labels: [<?php foreach($partyAndChamber as $party => $chamber['lower']) : ?>
 				'<?php echo $party ?>',
 				<?php endforeach; ?>],
 			datasets: [{
-				label: '# of Votes',
+				label: 'Elected Officials',
 				data:   [<?php foreach($partyAndChamber as $party => $chamber) : ?>
 					<?php echo isset($chamber['lower']) ? count($chamber['lower']) : 0 ?>,
 					<?php endforeach; ?>],

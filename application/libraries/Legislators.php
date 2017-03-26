@@ -1,5 +1,5 @@
 <?php namespace PoliticsMadeSimple;
-	class Legislators{
+	class Legislators {
 
 		protected $baseUrl = 'https://openstates.org/api/v1/legislators/';
 		protected $paramIndicator = '?';
@@ -46,18 +46,18 @@
 		 *
 		 * @param array $sanitizedFullApiResponse
 		 *
-		 * @return array $chamberCounts
+		 * @return array $chamberCounts[CHAMBER] => int
 		 */
-		public function getChamberCounts($sanitizedFullApiResponse){
+		public function getChamberCounts(array $sanitizedFullApiResponse){
 			$chamberCounts = array(
 				'upper' => 0,
 				'lower' => 0
 			);
-			foreach($sanitizedFullApiResponse as $legis){
-				if($legis->chamber === 'upper'){
+			foreach($sanitizedFullApiResponse as $legislator){
+				if(isset($legislator->chamber) && $legislator->chamber === 'upper'){
 					$chamberCounts['upper']++;
 				}
-				if($legis->chamber === 'lower'){
+				if(isset($legislator->chamber) && $legislator->chamber === 'lower'){
 					$chamberCounts['lower']++;
 				}
 			}
@@ -152,18 +152,40 @@
 		}
 
 		/**
+		 * Takes the return from sortChamber() and creates a new mixed array with only the lower chamber legislator data.
+		 * E.G. $lowerChamberLegislators[PARTY]['upper'][LEGISLATOR OBJECT]
+		 *
+		 * NOTE: This function is a convenience function the data is already stored in the return of sortChamber()
+		 *
+		 * @param $sanitizedResponse
+		 * @param $partiesInState
+		 *
+		 * @return array
+		 */
+		public function getLowerChamberByState($sanitizedResponse, $partiesInState) {
+			$sortedByChamber = $this->sortChamber($sanitizedResponse, $partiesInState);
+			$lowerChamberLegislators = array();
+			foreach ($sortedByChamber as $party => $chamberValue) {
+				if (isset($sortedByChamber[$party]['lower'])) {
+					$lowerChamberLegislators[$party] = $sortedByChamber[$party]['lower'];
+				}
+			}
+			return $lowerChamberLegislators;
+		}
+
+		/**
 		 * Takes the array $upperChamberLegislators[PARTY][CHAMBER][LEGISLATOR OBJECT]
 		 * This array is then counted to see how many parties are stored, then it counts the next level down, Chamber.
 		 * The difference of these two amounts indicates how many legislators are in the upper chamber.
 		 *
-		 * @param mixed $upperChamberLegislators
+		 * @param mixed $legislatorsSortedByChamber
 		 *
-		 * @return int $correctNumberOfUppers
+		 * @return int $correctNumberOfOfficialsInChamber
 		 */
-		public function countUpperChamber($upperChamberLegislators) {
-			$numberOfParties = count($upperChamberLegislators);
-			$correctNumberOfUppers = count($upperChamberLegislators, 1) - $numberOfParties;
-			return $correctNumberOfUppers;
+		public function countAnyChamber(array $legislatorsSortedByChamber) {
+			$numberOfParties = count($legislatorsSortedByChamber);
+			$correctNumberOfOfficialsInChamber = count($legislatorsSortedByChamber, 1) - $numberOfParties;
+			return $correctNumberOfOfficialsInChamber;
 		}
 
 		/*

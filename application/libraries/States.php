@@ -1,10 +1,11 @@
-<?php
-	class States{
+<?php namespace PoliticsMadeSimple;
+	class States {
 
 		protected $baseUrl = 'https://openstates.org/api/v1/metadata/';
 		protected $paramIndicator = '?';
 		protected $key = 'apikey=loganconnor44@gmail.com';
 		protected $and = '&';
+		protected $apiResponse;
 
 		public function getStatesOverview(){
 			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key;
@@ -52,5 +53,18 @@
 			$apiQuery = $this->baseUrl . $userAbbrevState . $this->paramIndicator . $this->key;
 			$apiResponse = file_get_contents($apiQuery);
 			return json_decode($apiResponse);
+		}
+
+		public function getEventFlag($response) {
+			$haveEventData = FALSE;
+			$this->apiResponse = $response[0];
+			if(isset($this->apiResponse->feature_flags)) {
+				foreach ($this->apiResponse->feature_flags as $flags) {
+					if ($flags === 'events') {
+						$haveEventData = TRUE;
+					}
+				}
+			}
+			return $haveEventData;
 		}
 	}

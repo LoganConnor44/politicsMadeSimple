@@ -1,6 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-	class Simple extends CI_Controller
-	{
+
+	class Simple extends CI_Controller{
+
+		protected $States;
+
 		public function __construct()
 		{
 			parent::__construct();
@@ -8,9 +11,9 @@
 			$this->load->helper('url');
 			$this->load->library(array(
 				'officials' => 'offs',
-				'states' => 'states',
 				'events' => 'events'
 			));
+			$this->States = new PoliticsMadeSimple\States();
 		}
 
 		public function index()
@@ -21,9 +24,8 @@
 				'legislators' => 'legislators',
 				'bills' => 'bills'
 			);
-
-			$statesOverview = $this->states->getStatesOverview();
-			$stateNamesAndAbbrev = $this->states->getAllStateNamesAndAbbrevs($statesOverview);
+			$statesOverview = $this->States->getStatesOverview();
+			$stateNamesAndAbbrev = $this->States->getAllStateNamesAndAbbrevs($statesOverview);
 
 			$data = array(
 				'states' => $stateNamesAndAbbrev,
@@ -35,8 +37,8 @@
 
 		public function ajaxAllStates()
 		{
-			$statesOverview = $this->states->getStatesOverview();
-			$stateNamesAndAbbrev = $this->states->getAllStateNamesAndAbbrevs($statesOverview);
+			$statesOverview = $this->States->getStatesOverview();
+			$stateNamesAndAbbrev = $this->States->getAllStateNamesAndAbbrevs($statesOverview);
 			echo json_encode($stateNamesAndAbbrev);
 		}
 

@@ -189,25 +189,64 @@
 	}
 
 	/**
+	 * Takes the return from sortChamber() and creates a new mixed array with only the lower chamber legislator data.
+	 * E.G. $lowerChamberLegislators[PARTY]['upper'][LEGISLATOR OBJECT]
+	 * Verifies that the newly created array matches the original array, $sanitizedResponse
+	 */
+	public function testGetLowerChamberByState() {
+		$Legislators = new Legislators();
+		$sanitizedResponse = $Legislators->sanitizeFullApiResponse($this->response);
+		$partiesInState = $Legislators->getPartiesInApiResponse($this->response);
+		$sortedByChamber = $Legislators->sortChamber($sanitizedResponse, $partiesInState);
+		$lowerChamberLegislators = array();
+		foreach ($sortedByChamber as $party => $chamberValue) {
+			if (isset($sortedByChamber[$party]['lower'])) {
+				$lowerChamberLegislators[$party] = $sortedByChamber[$party]['lower'];
+			}
+		}
+		$sanitizedResponseLowerCount = 0;
+		foreach ($sanitizedResponse as $legislator) {
+			if(isset($legislator->chamber) && $legislator->chamber === 'lower') {
+				$sanitizedResponseLowerCount++;
+			}
+		}
+		$numberOfLowerChamber = count($lowerChamberLegislators, 1) - count($lowerChamberLegislators);
+		$this->assertEquals($numberOfLowerChamber, $sanitizedResponseLowerCount);
+	}
+
+
+
+	/**
 	 * Takes the array $upperChamberLegislators[PARTY][CHAMBER][LEGISLATOR OBJECT]
 	 * This array is then counted to see how many parties are stored, then it counts the next level down, Chamber. The
 	 * difference of these two amounts indicates how many legislators are in the upper chamber.
 	 * Verifies by having a counter starting at zero and only incrementing when the chamber is set and it is set to
 	 * 'upper'.
 	 */
-	public function testCountUpperChamber() {
+	public function testCountAnyChamber() {
 		$Legislators = new Legislators();
 		$sanitizedResponse = $Legislators->sanitizeFullApiResponse($this->response);
 		$partiesInState = $Legislators->getPartiesInApiResponse($this->response);
 		$upperChamber = $Legislators->getUpperChamberByState($sanitizedResponse, $partiesInState);
-		$numberOfParties = count($upperChamber);
-		$numberOfUppers = count($upperChamber, 1) - $numberOfParties;
-		$count = 0;
+		$lowerChamber = $Legislators->getLowerChamberByState($sanitizedResponse, $partiesInState);
+		$numberOfPartiesInUpper = count($upperChamber);
+		$numberOfPartiesInLower = count($lowerChamber);
+		$numberOfUppers = count($upperChamber, 1) - $numberOfPartiesInUpper;
+		$numberOfLowers = count($lowerChamber, 1) - $numberOfPartiesInLower;
+		$countUpper = 0;
+		$countLower = 0;
 		foreach ($sanitizedResponse as $legislator) {
 			if (isset($legislator->chamber) && $legislator->chamber === 'upper') {
-				$count++;
+				$countUpper++;
 			}
 		}
-		$this->assertTrue($numberOfUppers - $count === 0);
+		foreach ($sanitizedResponse as $legislator) {
+			if (isset($legislator->chamber) && $legislator->chamber === 'lower') {
+				$countLower++;
+			}
+		}
+
+		$this->assertTrue($numberOfUppers - $countUpper === 0);
+		$this->assertTrue($numberOfLowers - $countLower === 0);
 	}
 }

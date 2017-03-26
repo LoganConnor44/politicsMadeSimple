@@ -1,6 +1,6 @@
 <?php
-
 	require __DIR__ . '/../libraries/Legislators.php';
+	require __DIR__ . '/../libraries/States.php';
 
 	use PoliticsMadeSimple\Legislators;
 

@@ -10,31 +10,31 @@
 			$this->load->helper('url');
 			$this->load->model('simple_m');
 			$this->load->library(array(
-				'states' => 'states',
 				'events' => 'events'
 			));
 		}
 
 		public function index(){
 			$this->userDefinedState = $this->input->post('stateSelect');
-			$state = $this->states->linkAbbrevToStateFullName($this->userDefinedState);
+			$States = new PoliticsMadeSimple\States();
+			$state = $States->linkAbbrevToStateFullName($this->userDefinedState);
 			$Legislators = new PoliticsMadeSimple\Legislators();
 			$apiResponse = $Legislators->getAllLegislatorsByState($this->userDefinedState);
 			$sanitizedResponse = $Legislators->sanitizeFullApiResponse($apiResponse);
 			$legisParties = $Legislators->getPartiesInApiResponse($sanitizedResponse);
 			$sortedParties = $Legislators->sortAllLegislatorsByParty($sanitizedResponse, $legisParties);
 			$sortedByPartyAndChamber = $Legislators->sortChamber($sanitizedResponse, $legisParties);
-			$stateDetail = $this->states->getStateDetail($this->userDefinedState);
+			$stateDetail = $States->getStateDetail($this->userDefinedState);
 			$chamberCounts = $Legislators->getChamberCounts($sanitizedResponse);
 			$upcomingEvents = $this->events->getEventsForSelectedState($this->userDefinedState);
 			$isThereAnUpcomingEvent = $this->events->upcomingEvents($upcomingEvents);
 			$isThereAnUpcomingEvent ? $numberOfEvents = $this->events->howManyEvents($upcomingEvents) : $numberOfEvents = FALSE;
-			$doesUpperChamberExist = $this->states->doesUpperChamberExist($stateDetail);
-			$doesLowerChamberExist = $this->states->doesLowerChamberExist($stateDetail);
+			$doesUpperChamberExist = $States->doesUpperChamberExist($stateDetail);
+			$doesLowerChamberExist = $States->doesLowerChamberExist($stateDetail);
 			$htmlChamberResponse = $this->formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist,
 				$stateDetail, $chamberCounts);
 			$upperChamber = $Legislators->getUpperChamberByState($sanitizedResponse, $legisParties);
-			$numberOfUpperLegislators = $Legislators->countUpperChamber($upperChamber);
+			$numberOfUpperLegislators = $Legislators->countAnyChamber($upperChamber);
 			$partyDistributionHtml = $this->formatHtmlPartyDistribution($sortedParties, 'PARTY_DISTRIBUTION');
 			$upperChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'UPPER_CHAMBER');
 			$lowerChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'LOWER_CHAMBER');
@@ -43,6 +43,7 @@
 				'stateDetail' => $stateDetail,
 				'userDefinedState' => strtoupper($this->userDefinedState),
 				'selectedState' => $state,
+				'stateFullName' => $state[strtoupper($this->userDefinedState)],
 				'parties' => $sortedParties,
 				'totalLegislators' => count($sanitizedResponse),
 				'civicDataBy' => $this->civicDataBy,
@@ -52,10 +53,11 @@
 				'landingPage' => FALSE,
 				'partyAndChamber' => $sortedByPartyAndChamber,
 				'upperChamber' => $upperChamber,
-				'numberOfUpperLegislators' => $numberOfUpperLegislators,
 				'partyDistribution' => $partyDistributionHtml,
 				'upperChamberHtml' => $upperChamberHtml,
-				'lowerChamberHtml' => $lowerChamberHtml
+				'lowerChamberHtml' => $lowerChamberHtml,
+				'numberOfUpper' => $chamberCounts['upper'],
+				'numberOfLower' => $chamberCounts['lower']
 			);
 			$this->load->view('stateLegislators_v', $data);
 		}

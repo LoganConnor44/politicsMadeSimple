@@ -9,9 +9,6 @@
 			parent::__construct();
 			$this->load->helper('url');
 			$this->load->model('simple_m');
-			$this->load->library(array(
-				'events' => 'events'
-			));
 		}
 
 		public function index(){
@@ -26,9 +23,10 @@
 			$sortedByPartyAndChamber = $Legislators->sortChamber($sanitizedResponse, $legisParties);
 			$stateDetail = $States->getStateDetail($this->userDefinedState);
 			$chamberCounts = $Legislators->getChamberCounts($sanitizedResponse);
-			$upcomingEvents = $this->events->getEventsForSelectedState($this->userDefinedState);
-			$isThereAnUpcomingEvent = $this->events->upcomingEvents($upcomingEvents);
-			$isThereAnUpcomingEvent ? $numberOfEvents = $this->events->howManyEvents($upcomingEvents) : $numberOfEvents = FALSE;
+			$Events = new \PoliticsMadeSimple\Events();
+			$upcomingEvents = $Events->getEventsForSelectedState($this->userDefinedState);
+			$isThereAnUpcomingEvent = $Events->upcomingEvents($upcomingEvents);
+			$isThereAnUpcomingEvent ? $numberOfEvents = $Events->howManyEvents($upcomingEvents) : $numberOfEvents = FALSE;
 			$doesUpperChamberExist = $States->doesUpperChamberExist($stateDetail);
 			$doesLowerChamberExist = $States->doesLowerChamberExist($stateDetail);
 			$htmlChamberResponse = $this->formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist,
@@ -57,7 +55,12 @@
 				'upperChamberHtml' => $upperChamberHtml,
 				'lowerChamberHtml' => $lowerChamberHtml,
 				'numberOfUpper' => $chamberCounts['upper'],
-				'numberOfLower' => $chamberCounts['lower']
+				'numberOfLower' => $chamberCounts['lower'],
+				'eventsCardTemplate' => array(
+					'cardColour' => 'amber',
+					'cardTitle' => 'Title Goes Here',
+					'cardSubtitle' => 'Subtitle Goes Here'
+				)
 			);
 			$this->load->view('stateLegislators_v', $data);
 		}

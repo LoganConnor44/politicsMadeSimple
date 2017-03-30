@@ -157,4 +157,10 @@ $(document).ready(function() {
 		menuWidth: 150,
 		draggable: true
 	});
+
+    $('.datepicker').pickadate({
+        selectMonths: true,
+        selectYears: 5
+    });
+    //if you want to have it auto-open do the function .click() at the end of that above initialization
 });

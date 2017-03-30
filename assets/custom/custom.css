@@ -67,6 +67,10 @@ ul.stately {
     margin-top: 10px;
 }
 
+#centerHorizontalBadgeInButton {
+    margin-top: 7px;
+}
+
 /*Footer Has 20px Extra Padding - Taking It Away*/
 .noTopPadding{
     padding-top: 0px !important;
@@ -88,4 +92,16 @@ select{
 
 #infoButtonCenter{
     line-height: 40px !important;
+}
+
+#cardTemplate {
+
+}
+
+#cardTitle {
+    padding: 10px 3% 0 3%;
+}
+
+#cardSubtitle {
+    padding: 10px 3% 0 3%;
 }

@@ -5,6 +5,7 @@
 	<title>Politics Made Simple</title>
 	<!--Import Google Icon Font-->
 	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
 	<!--Import materialize.css-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css" media="screen,projection"/>
 	<!--Let browser know website is optimized for mobile-->
@@ -41,10 +42,22 @@
 					<?php if(!$isThereAnUpcomingEvent) : ?>
 						<p>There are no upcoming events.</p>
 					<?php else : ?>
-						<p>There are <?php echo $numberOfEvents ?> upcoming events!</p>
+                        <input type="date" class="datepicker" id="eventsPicker">
+                        <a class="waves-effect waves-light btn" href="#eventsPicker">
+                            <i class="material-icons left">today</i>
+                            View Details
+                            <span class="new badge blue" data-badge-caption="upcoming" id="centerHorizontalBadgeInButton">
+                                <?php echo $numberOfEvents ?>
+                            </span>
+                        </a>
+
+
+
+                        <!--<p>There are <?php /*echo $numberOfEvents */?> upcoming events!</p>-->
 					<?php endif; ?>
-				</div>
+                </div>
 			</div>
+			<?php $this->load->view('templates/card_template_v.php', $eventsCardTemplate); ?>
 			<div class="row">
 				<div class="col s12 m6">
 					<div class="card teal darken-2">

@@ -11,7 +11,6 @@
 			$this->load->helper('url');
 			$this->load->library(array(
 				'officials' => 'offs',
-				'events' => 'events'
 			));
 			$this->States = new PoliticsMadeSimple\States();
 		}

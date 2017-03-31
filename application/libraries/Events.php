@@ -13,6 +13,11 @@ class Events {
 		return json_decode($apiResponse);
 	}
 
+	public function getEventDescription($fullApiResponse) {
+		
+	}
+
+
 	public function upcomingEvents($fullApiResponse){
 		$areThereUpcomingEvents = TRUE;
 		//if there are no events an empty json will be returned

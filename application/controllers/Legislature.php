@@ -36,6 +36,7 @@
 			$partyDistributionHtml = $this->formatHtmlPartyDistribution($sortedParties, 'PARTY_DISTRIBUTION');
 			$upperChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'UPPER_CHAMBER');
 			$lowerChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'LOWER_CHAMBER');
+			$isThereEventHtml = $this->formatHtmlIsThereAnUpcomingEvent($isThereAnUpcomingEvent, $numberOfEvents);
 
 			$data = array(
 				'stateDetail' => $stateDetail,
@@ -58,11 +59,18 @@
 				'numberOfLower' => $chamberCounts['lower'],
 				'eventsCardTemplate' => array(
 					'cardColour' => 'amber',
-					'cardTitle' => 'Title Goes Here',
-					'cardSubtitle' => 'Subtitle Goes Here'
+					'cardTitle' => 'Events',
+					'cardSubtitle' => $isThereEventHtml
 				)
 			);
 			$this->load->view('stateLegislators_v', $data);
+		}
+
+		public function formatHtmlIsThereAnUpcomingEvent($isThereAnUpcomingEvent, $numberOfEvents) {
+			if (!$isThereAnUpcomingEvent) {
+				return "There are no upcoming events.";
+			}
+			return "There are $numberOfEvents upcoming events.";
 		}
 
 		public function formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist, $state, $chamberCounts){

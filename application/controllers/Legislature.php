@@ -1,9 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+	use PoliticsMadeSimple\States;
+	use PoliticsMadeSimple\Legislators;
+	use PoliticsMadeSimple\Events;
+
 	class Legislature extends CI_Controller{
 
 		public $userDefinedState;
 		public $civicDataBy = 'OpenStates.org';
+
 
 		public function __construct(){
 			parent::__construct();
@@ -13,9 +18,9 @@
 
 		public function index(){
 			$this->userDefinedState = $this->input->post('stateSelect');
-			$States = new PoliticsMadeSimple\States();
+			$States = new States($this->userDefinedState);
 			$state = $States->linkAbbrevToStateFullName($this->userDefinedState);
-			$Legislators = new PoliticsMadeSimple\Legislators();
+			$Legislators = new Legislators();
 			$apiResponse = $Legislators->getAllLegislatorsByState($this->userDefinedState);
 			$sanitizedResponse = $Legislators->sanitizeFullApiResponse($apiResponse);
 			$legisParties = $Legislators->getPartiesInApiResponse($sanitizedResponse);
@@ -23,10 +28,7 @@
 			$sortedByPartyAndChamber = $Legislators->sortChamber($sanitizedResponse, $legisParties);
 			$stateDetail = $States->getStateDetail($this->userDefinedState);
 			$chamberCounts = $Legislators->getChamberCounts($sanitizedResponse);
-			$Events = new \PoliticsMadeSimple\Events();
-			$upcomingEvents = $Events->getEventsForSelectedState($this->userDefinedState);
-			$isThereAnUpcomingEvent = $Events->upcomingEvents($upcomingEvents);
-			$isThereAnUpcomingEvent ? $numberOfEvents = $Events->howManyEvents($upcomingEvents) : $numberOfEvents = FALSE;
+			$eventCardData = $this->getEventsCardData($States->eventsDataAvailable);
 			$doesUpperChamberExist = $States->doesUpperChamberExist($stateDetail);
 			$doesLowerChamberExist = $States->doesLowerChamberExist($stateDetail);
 			$htmlChamberResponse = $this->formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist,
@@ -36,7 +38,8 @@
 			$partyDistributionHtml = $this->formatHtmlPartyDistribution($sortedParties, 'PARTY_DISTRIBUTION');
 			$upperChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'UPPER_CHAMBER');
 			$lowerChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'LOWER_CHAMBER');
-			$isThereEventHtml = $this->formatHtmlIsThereAnUpcomingEvent($isThereAnUpcomingEvent, $numberOfEvents);
+
+
 
 			$data = array(
 				'stateDetail' => $stateDetail,
@@ -46,8 +49,6 @@
 				'parties' => $sortedParties,
 				'totalLegislators' => count($sanitizedResponse),
 				'civicDataBy' => $this->civicDataBy,
-				'isThereAnUpcomingEvent' => $isThereAnUpcomingEvent,
-				'numberOfEvents' => $numberOfEvents,
 				'htmlChamberResponse' => $htmlChamberResponse,
 				'landingPage' => FALSE,
 				'partyAndChamber' => $sortedByPartyAndChamber,
@@ -57,20 +58,38 @@
 				'lowerChamberHtml' => $lowerChamberHtml,
 				'numberOfUpper' => $chamberCounts['upper'],
 				'numberOfLower' => $chamberCounts['lower'],
-				'eventsCardTemplate' => array(
-					'cardColour' => 'amber',
-					'cardTitle' => 'Events',
-					'cardSubtitle' => $isThereEventHtml
-				)
+				'eventsData' => $eventCardData
 			);
 			$this->load->view('stateLegislators_v', $data);
 		}
 
-		public function formatHtmlIsThereAnUpcomingEvent($isThereAnUpcomingEvent, $numberOfEvents) {
-			if (!$isThereAnUpcomingEvent) {
-				return "There are no upcoming events.";
+		public function getEventsCardData($isDataAvailable) {
+			$eventsCardTemplate = array(
+				'cardColour' => 'amber',
+				'cardTitle' => 'Events'
+			);
+			if ($isDataAvailable) {
+				$data = $this->callAllEventsMethods();
+				$data = array_merge($eventsCardTemplate, $data);
+			} else {
+				$data = array(
+					'isThereAnUpcomingEvent' => FALSE,
+					'numberOfEvents' => 0,
+					'cardSubtitle' => 'This state does not provide Events Data.'
+				);
+				$data = array_merge($eventsCardTemplate, $data);
 			}
-			return "There are $numberOfEvents upcoming events.";
+			return $data;
+		}
+
+		public function callAllEventsMethods() {
+			$Events = new Events($this->userDefinedState);
+			$data = array(
+				'isThereAnUpcomingEvent' => $Events->upcomingEvents,
+				'numberOfEvents' => $Events->howManyEvents,
+				'cardSubtitle' => $Events->htmlIsThereAnUpcomingEvent()
+			);
+			return $data;
 		}
 
 		public function formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist, $state, $chamberCounts){

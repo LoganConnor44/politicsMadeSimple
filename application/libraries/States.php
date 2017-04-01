@@ -7,6 +7,18 @@
 		protected $and = '&';
 		protected $apiResponse;
 
+		protected $statesData;
+		protected $stateAbbreviation;
+		public $eventsDataAvailable;
+
+		public function __construct(string $stateAbbreviation = ''){
+			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key;
+			$apiResponse = file_get_contents($apiQuery);
+			$this->statesData = json_decode($apiResponse);
+			$this->stateAbbreviation = $stateAbbreviation;
+			$this->getEventFlag();
+		}
+
 		public function getStatesOverview(){
 			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key;
 			$apiResponse = file_get_contents($apiQuery);
@@ -55,16 +67,22 @@
 			return json_decode($apiResponse);
 		}
 
-		public function getEventFlag($response) {
-			$haveEventData = FALSE;
-			$this->apiResponse = $response[0];
-			if(isset($this->apiResponse->feature_flags)) {
-				foreach ($this->apiResponse->feature_flags as $flags) {
-					if ($flags === 'events') {
-						$haveEventData = TRUE;
+		/**
+		 * Returns false unless within the states json, the state we are searching for has events as one of the strings
+		 * in the attribute feature_flags.
+		 *
+		 * @return bool
+		 */
+		public function getEventFlag() {
+			$this->eventsDataAvailable = FALSE;
+			if(isset($this->statesData)) {
+				foreach ($this->statesData as $data) {
+					if ($data->abbreviation === $this->stateAbbreviation) {
+						if (in_array('events', $data->feature_flags)) {
+							$this->eventsDataAvailable = TRUE;
+						}
 					}
 				}
 			}
-			return $haveEventData;
 		}
 	}

@@ -188,6 +188,8 @@
 			return $correctNumberOfOfficialsInChamber;
 		}
 
+
+
 		/*
 		 * Depreciated
 		 * This was an extra call that didn't need to be implemented

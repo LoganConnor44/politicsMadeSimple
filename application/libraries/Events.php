@@ -1,4 +1,7 @@
 <?php namespace PoliticsMadeSimple;
+
+use DateTime;
+
 class Events {
 
 	protected $baseUrl = 'https://openstates.org/api/v1/events/';
@@ -8,8 +11,9 @@ class Events {
 	protected $state = 'state=';
 	protected $response;
 	public $upcomingEvents;
-	protected $eventData;
+	public $eventData;
 	public $howManyEvents = 0;
+	public $dateDifference;
 
 	public function __construct($stateAbbrev){
 		$apiQuery = $this->baseUrl . $this->paramIndicator . $this->state . $stateAbbrev . $this->and . $this->key;
@@ -19,6 +23,13 @@ class Events {
 		if ($this->upcomingEvents) {
 			$this->organizeEventData($this->response);
 			$this->howManyEvents();
+			date_default_timezone_set("America/New_York");
+			$today = new DateTime();
+			$today->format('Y-m-d H:i:s');
+			foreach ($this->eventData as $data) {
+				$dateDifference = $this->dateDifference($data->when, $today);
+				$data->dateDifference = $dateDifference;
+			}
 		}
 	}
 
@@ -62,5 +73,42 @@ class Events {
 			return "There are no upcoming events.";
 		}
 		return "There are $this->howManyEvents upcoming events.";
+	}
+
+	public function htmlQuickView() {
+		date_default_timezone_set("America/New_York");
+		$today = new DateTime();
+		$today->format('Y-m-d H:i:s');
+		foreach($this->eventData as $data) {
+			$dateDifference = $this->dateDifference($data->when, $today);
+			$string = "$data->description";
+			$mainArray[] = $string;
+		}
+		return $mainArray;
+	}
+
+	/**
+	 * Takes the current date and finds the number of days between then and the date passed in as $when.
+	 *
+	 * @param string $when
+	 * @param DateTime object $now
+	 *
+	 * @return string $difference
+	 */
+	public function dateDifference($when, $now){
+		$dt = new DateTime($when);
+		$difference = $now->diff($dt)->days;
+		if ($now > $dt) {
+			$difference = -1 * $difference;
+		}
+		if ($difference < 0 ) {
+
+			$finalString = (string) -1*$difference . " Days Ago";
+		} else if ($difference == 0){
+			$finalString = "Today";
+		} else {
+			$finalString = "In " . (string) $difference . " Days";
+		}
+		return $finalString;
 	}
 }

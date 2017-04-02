@@ -105,3 +105,9 @@ select{
 #cardSubtitle {
     padding: 10px 3% 0 3%;
 }
+
+@media screen and (max-width: 600px) {
+    .disappearOnSmallMobile {
+        display: none !important;
+    }
+}

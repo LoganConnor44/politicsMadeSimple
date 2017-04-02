@@ -87,7 +87,8 @@
 			$data = array(
 				'isThereAnUpcomingEvent' => $Events->upcomingEvents,
 				'numberOfEvents' => $Events->howManyEvents,
-				'cardSubtitle' => $Events->htmlIsThereAnUpcomingEvent()
+				'cardSubtitle' => $Events->htmlIsThereAnUpcomingEvent(),
+				'eventData' => $Events->eventData
 			);
 			return $data;
 		}

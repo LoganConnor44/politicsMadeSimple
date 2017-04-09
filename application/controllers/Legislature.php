@@ -66,7 +66,8 @@
 		public function getEventsCardData($isDataAvailable) {
 			$eventsCardTemplate = array(
 				'cardColour' => 'amber',
-				'cardTitle' => 'Events'
+				'cardTitle' => 'Events',
+				'cardContent' => 'templates/cardContent/events_content_v'
 			);
 			if ($isDataAvailable) {
 				$data = $this->callAllEventsMethods();

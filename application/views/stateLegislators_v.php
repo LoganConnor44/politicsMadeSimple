@@ -38,20 +38,6 @@
 					<p>
 						Their official webpage can be found <a id="customLinkColour" href="<?php echo $stateDetail->legislature_url ?>">here</a>.
 					</p>
-					<h2>Events</h2>
-					<?php if(!$eventsData['isThereAnUpcomingEvent']) : ?>
-						<p>There are no upcoming events.</p>
-					<?php else : ?>
-                        <input type="date" class="datepicker" id="eventsPicker">
-                        <a class="waves-effect waves-light btn red" href="#eventsPicker">
-                            <i class="material-icons left">today</i>
-                            View Details
-                            <span class="new badge blue" data-badge-caption="upcoming" id="centerHorizontalBadgeInButton">
-                                <?php echo $eventsData['numberOfEvents'] ?>
-                            </span>
-                        </a>
-                        <!--<p>There are <?php /*echo $numberOfEvents */?> upcoming events!</p>-->
-					<?php endif; ?>
                 </div>
 			</div>
 			<?php $this->load->view('templates/card_template_v.php', $eventsData); ?>

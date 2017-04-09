@@ -1,97 +1,49 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-	use PoliticsMadeSimple\States;
-	use PoliticsMadeSimple\Legislators;
-	use PoliticsMadeSimple\Events;
-
 	class Legislature extends CI_Controller{
 
 		public $userDefinedState;
 		public $civicDataBy = 'OpenStates.org';
 
-
 		public function __construct(){
 			parent::__construct();
 			$this->load->helper('url');
-			$this->load->model('simple_m');
+			$this->load->library(array(
+				'legislators' => 'legis',
+				'states' => 'states',
+				'events' => 'events'
+			));
 		}
 
 		public function index(){
 			$this->userDefinedState = $this->input->post('stateSelect');
-			$States = new States($this->userDefinedState);
-			$state = $States->linkAbbrevToStateFullName($this->userDefinedState);
-			$Legislators = new Legislators();
-			$apiResponse = $Legislators->getAllLegislatorsByState($this->userDefinedState);
-			$sanitizedResponse = $Legislators->sanitizeFullApiResponse($apiResponse);
-			$legisParties = $Legislators->getPartiesInApiResponse($sanitizedResponse);
-			$sortedParties = $Legislators->sortAllLegislatorsByParty($sanitizedResponse, $legisParties);
-			$sortedByPartyAndChamber = $Legislators->sortChamber($sanitizedResponse, $legisParties);
-			$stateDetail = $States->getStateDetail($this->userDefinedState);
-			$chamberCounts = $Legislators->getChamberCounts($sanitizedResponse);
-			$eventCardData = $this->getEventsCardData($States->eventsDataAvailable);
-			$doesUpperChamberExist = $States->doesUpperChamberExist($stateDetail);
-			$doesLowerChamberExist = $States->doesLowerChamberExist($stateDetail);
+			$state = $this->states->linkAbbrevToStateFullName($this->userDefinedState);
+			$apiResponse = $this->legis->getAllLegislatorsByState($this->userDefinedState);
+			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
+			$sortedParties = $this->legis->sortAllLegislatorsByParty($apiResponse, $legisParties);
+			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
+			$stateDetail = $this->states->getStateDetail($this->userDefinedState);
+			$chamberCounts = $this->legis->getChamberCounts($apiResponse);
+			$upcomingEvents = $this->events->getEventsForSelectedState($this->userDefinedState);
+			$isThereAnUpcomingEvent = $this->events->upcomingEvents($upcomingEvents);
+			$doesUpperChamberExist = $this->states->doesUpperChamberExist($stateDetail);
+			$doesLowerChamberExist = $this->states->doesLowerChamberExist($stateDetail);
 			$htmlChamberResponse = $this->formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist,
 				$stateDetail, $chamberCounts);
-			$upperChamber = $Legislators->getUpperChamberByState($sanitizedResponse, $legisParties);
-			$numberOfUpperLegislators = $Legislators->countAnyChamber($upperChamber);
-			$partyDistributionHtml = $this->formatHtmlPartyDistribution($sortedParties, 'PARTY_DISTRIBUTION');
-			$upperChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'UPPER_CHAMBER');
-			$lowerChamberHtml = $this->formatHtmlPartyDistribution($sortedByPartyAndChamber, 'LOWER_CHAMBER');
-
-
 
 			$data = array(
 				'stateDetail' => $stateDetail,
 				'userDefinedState' => strtoupper($this->userDefinedState),
 				'selectedState' => $state,
-				'stateFullName' => $state[strtoupper($this->userDefinedState)],
 				'parties' => $sortedParties,
-				'totalLegislators' => count($sanitizedResponse),
+				'totalLegislators' => count($apiResponse),
 				'civicDataBy' => $this->civicDataBy,
+				'upcomingEvents' => $isThereAnUpcomingEvent ? $upcomingEvents : $isThereAnUpcomingEvent,
 				'htmlChamberResponse' => $htmlChamberResponse,
 				'landingPage' => FALSE,
-				'partyAndChamber' => $sortedByPartyAndChamber,
-				'upperChamber' => $upperChamber,
-				'partyDistribution' => $partyDistributionHtml,
-				'upperChamberHtml' => $upperChamberHtml,
-				'lowerChamberHtml' => $lowerChamberHtml,
-				'numberOfUpper' => $chamberCounts['upper'],
-				'numberOfLower' => $chamberCounts['lower'],
-				'eventsData' => $eventCardData
+				'partyAndChamber' => $sortedByPartyAndChamber
 			);
 			$this->load->view('stateLegislators_v', $data);
-		}
-
-		public function getEventsCardData($isDataAvailable) {
-			$eventsCardTemplate = array(
-				'cardColour' => 'amber',
-				'cardTitle' => 'Events',
-				'cardContent' => 'templates/cardContent/events_content_v'
-			);
-			if ($isDataAvailable) {
-				$data = $this->callAllEventsMethods();
-				$data = array_merge($eventsCardTemplate, $data);
-			} else {
-				$data = array(
-					'isThereAnUpcomingEvent' => FALSE,
-					'numberOfEvents' => 0,
-					'cardSubtitle' => 'This state does not provide Events Data.'
-				);
-				$data = array_merge($eventsCardTemplate, $data);
-			}
-			return $data;
-		}
-
-		public function callAllEventsMethods() {
-			$Events = new Events($this->userDefinedState);
-			$data = array(
-				'isThereAnUpcomingEvent' => $Events->upcomingEvents,
-				'numberOfEvents' => $Events->howManyEvents,
-				'cardSubtitle' => $Events->htmlIsThereAnUpcomingEvent(),
-				'eventData' => $Events->eventData
-			);
-			return $data;
 		}
 
 		public function formatHtmlBasedOnChamber($doesUpperChamberExist, $doesLowerChamberExist, $state, $chamberCounts){
@@ -117,98 +69,17 @@
 			return $htmlResponse;
 		}
 
-		public function formatHtmlPartyDistribution(array $sortedParties, string $viewElement) {
-			$htmlString = '';
-			$i = count($sortedParties);
-			switch ($viewElement) {
-				case 'PARTY_DISTRIBUTION' :
-					foreach ($sortedParties as $party => $officialsData) {
-						if ($i >= 2) {
-							$htmlString .= count($officialsData) .' ' . $party . 's, ';
-							$i--;
-						} else {
-							$htmlString .= ' and ' . count($officialsData) .' ' . $party . 's';
-						}
-					}
-					break;
-				case 'UPPER_CHAMBER' :
-					foreach($sortedParties as $party => $officialsData) {
-						if (isset($officialsData['upper'])) {
-							$countOfData = count($officialsData['upper']);
-						} else {
-							$countOfData = 0;
-						}
-						if ($i >= 2) {
-							$htmlString .= $countOfData . ' ' . $party . 's, ';
-							$i--;
-						} else {
-							$htmlString .= ' and ' . $countOfData . ' ' . $party . 's';
-						}
-					}
-					break;
-				case 'LOWER_CHAMBER' :
-					foreach($sortedParties as $party => $officialsData) {
-						if (isset($officialsData['lower'])) {
-							$countOfData = count($officialsData['lower']);
-						} else {
-							$countOfData = 0;
-						}
-						if ($i >= 2) {
-							$htmlString .= $countOfData . ' ' . $party . 's, ';
-							$i--;
-						} else {
-							$htmlString .= ' and ' . $countOfData . ' ' . $party . 's';
-						}
-					}
-					break;
-			}
-			return $htmlString;
-		}
-
-		/*public function test(){
+		public function test(){
 			$apiResponse = $this->legis->getAllLegislatorsByState('tx');
 			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
 			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
 			echo "<pre>";
 			var_dump($sortedByPartyAndChamber);
-		}
-
-		public function testUpper(){
-			$results = $this->legis->getSenateLegislatorsByState('FL');
-			echo "<pre>";
-			print_r($results);
-		}
-
-		public function testSortSenate(){
-			$results = $this->legis->getSenateLegislatorsByState('fl');
-			$parties = $this->legis->getPartiesInApiResponse($results);
-			echo "<pre>";
-			var_dump($this->legis->sortSenatorsByParty($results, $parties));
 		}
 
 		public function testEvents(){
-			$fullResponse = $this->events->getEventsForSelectedState('fl');
+			$fullResponse = $this->events->getEventsForSelectedState('FL');
 			$result = $this->events->upcomingEvents($fullResponse);
-			$numberOfEvents = $this->events->howManyEvents($fullResponse);
 			var_dump($result);
-		}*/
-
-		public function testSortChamberAndParty(){
-			$Legislature = new PoliticsMadeSimple\Legislators();
-			$apiResponse = $Legislature->getAllLegislatorsByState('fl');
-			$legisParties = $Legislature->getPartiesInApiResponse($apiResponse);
-			$sortedByPartyAndChamber = $Legislature->sortChamber($apiResponse, $legisParties);
-			echo "<pre>";
-			foreach ($sortedByPartyAndChamber as $party => $data) {
-				var_dump($data['lower']);
-			}
 		}
-
-		/*public function testDataError(){
-			$apiResponse = $this->legis->getAllLegislatorsByState('tx');
-			$legisParties = $this->legis->getPartiesInApiResponse($apiResponse);
-			$sortedByPartyAndChamber = $this->legis->sortChamber($apiResponse, $legisParties);
-			echo "<pre>";
-			var_dump($sortedByPartyAndChamber);
-		}*/
 	}

@@ -59,18 +59,6 @@ ul.stately {
     padding-bottom: 20px;
 }
 
-.extraBottomMargin{
-    margin-bottom: 25px;
-}
-
-.extraTopMargin{
-    margin-top: 10px;
-}
-
-#centerHorizontalBadgeInButton {
-    margin-top: 7px;
-}
-
 /*Footer Has 20px Extra Padding - Taking It Away*/
 .noTopPadding{
     padding-top: 0px !important;
@@ -88,26 +76,4 @@ select{
 
 #stateSelectLabel{
     color: #e3f2fd;
-}
-
-#infoButtonCenter{
-    line-height: 40px !important;
-}
-
-#cardTemplate {
-
-}
-
-#cardTitle {
-    padding: 10px 3% 0 3%;
-}
-
-#cardSubtitle {
-    padding: 10px 3% 0 3%;
-}
-
-@media screen and (max-width: 600px) {
-    .disappearOnSmallMobile {
-        display: none !important;
-    }
 }

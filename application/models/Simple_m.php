@@ -1,18 +1,7 @@
 <?php
-	require __DIR__ . '/../libraries/Legislators.php';
-	require __DIR__ . '/../libraries/States.php';
-	require __DIR__ . '/../libraries/Events.php';
-
-	use PoliticsMadeSimple\Legislators;
 
 	Class Simple_m extends CI_Model
 	{
-		public $Legislators;
-
-		public function __construct() {
-			$this->Legislators = new Legislators();
-		}
-
 		public function getStateData($stateId)
 		{
 			$iface = "/State.getState";

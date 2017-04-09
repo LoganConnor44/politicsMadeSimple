@@ -5,7 +5,6 @@
 	<title>Politics Made Simple</title>
 	<!--Import Google Icon Font-->
 	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
 	<!--Import materialize.css-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css" media="screen,projection"/>
 	<!--Let browser know website is optimized for mobile-->
@@ -38,47 +37,31 @@
 					<p>
 						Their official webpage can be found <a id="customLinkColour" href="<?php echo $stateDetail->legislature_url ?>">here</a>.
 					</p>
-                </div>
-			</div>
-			<?php $this->load->view('templates/card_template_v.php', $eventsData); ?>
-			<div class="row">
-				<div class="col s12 m6">
-					<div class="card teal darken-2">
-						<div class="card-content">
-							<span class="card-title"><h3 class="center-align">Party Distribution</h3></span>
-							<div class="divider"></div>
-							<canvas id="legisDonut"></canvas>
-							<span class="activator card-title extraTopMargin">View Details<i class="material-icons right">info_outline</i></span>
-						</div>
-						<div class="card-reveal">
-							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
-							<div class="grey-text text-darken-4">
-								<p>
-									There is a total of <? echo $totalLegislators . ' ' . $stateDetail->legislature_name.' members.'?>
-									Which is made up of <?php echo $partyDistribution ?>.
-								</p>
-							</div>
-						</div>
-					</div>
+					<h2>Events</h2>
+					<?php if(!$upcomingEvents) : ?>
+						<p>There are no upcoming events.</p>
+					<?php endif; ?>
+					<?php if(is_object($upcomingEvents)) : ?>
+						<p>There are upcoming events!</p>
+					<?php endif; ?>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col s12 m6">
 					<div class="card teal darken-2">
 						<div class="card-content white-text">
+							<span class="card-title"><h2 class="center-align">Party Distribution</h2></span>
+							<div class="divider"></div>
+							<canvas id="legisDonut"></canvas>
+						</div>
+					</div>
+				</div>
+				<div class="col s12 m6">
+					<div class="card teal darken-2">
+						<div class="card-content white-text">
 							<span class="card-title"><h2 class="center-align">Senate</h2></span>
 							<div class="divider"></div>
 							<canvas id="upperChamberDonut"></canvas>
-							<span class="activator card-title extraTopMargin">View Details<i class="material-icons right">info_outline</i></span>
-						</div>
-						<div class="card-reveal">
-							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
-							<div class="grey-text text-darken-4">
-								<p>
-									<?php echo $stateFullName ?> has a total of <?php echo $numberOfUpper . ' Senators.' ?>
-									Which is further made up of <?php echo $upperChamberHtml ?>.
-								</p>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -88,16 +71,6 @@
 							<span class="card-title"><h2 class="center-align">House</h2></span>
 							<div class="divider"></div>
 							<canvas id="lowerChamberDonut"></canvas>
-							<span class="activator card-title extraTopMargin">View Details<i class="material-icons right">info_outline</i></span>
-						</div>
-						<div class="card-reveal">
-							<span class="card-title grey-text text-darken-4">Party Distribution<i class="material-icons right">close</i></span>
-							<div class="grey-text text-darken-4">
-								<p>
-									<?php echo $stateFullName ?> has a total of <?php echo $numberOfLower . ' Representatives.' ?>
-                                    Which is further made up of <?php echo $lowerChamberHtml ?>.
-								</p>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -128,9 +101,9 @@
 					<?php echo count($party) ?>,
 					<?php endforeach; ?>],
 				backgroundColor: [
-					'rgba(68,138,255,0.95)',
-					'rgba(255,82,82,0.95)',
-					'rgba(0,230,118,0.95)',
+					'rgba(68,138,255,0.75)',
+					'rgba(255,82,82,0.75)',
+					'rgba(0,230,118,0.75)',
 					'rgba(75, 192, 192, 0.5)',
 					'rgba(153, 102, 255, 0.5)',
 					'rgba(255, 159, 64, 0.5)'
@@ -159,7 +132,7 @@
 <script>
 	var upperD = document.getElementById("upperChamberDonut");
 	var upperChamberDonut = new Chart(upperD, {
-		type: 'polarArea',
+		type: 'doughnut',
 		data:{
 			labels: [<?php foreach($partyAndChamber as $party => $chamber['upper']) : ?>
 				'<?php echo $party ?>',
@@ -201,13 +174,13 @@
 <script>
 	var lowerD = document.getElementById("lowerChamberDonut");
 	var lowerChamberDonut = new Chart(lowerD, {
-		type: 'bar',
+		type: 'doughnut',
 		data:{
 			labels: [<?php foreach($partyAndChamber as $party => $chamber['lower']) : ?>
 				'<?php echo $party ?>',
 				<?php endforeach; ?>],
 			datasets: [{
-				label: 'Elected Officials',
+				label: '# of Votes',
 				data:   [<?php foreach($partyAndChamber as $party => $chamber) : ?>
 					<?php echo isset($chamber['lower']) ? count($chamber['lower']) : 0 ?>,
 					<?php endforeach; ?>],

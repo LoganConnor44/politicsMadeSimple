@@ -3,7 +3,7 @@
 
 		protected $baseUrl = 'https://openstates.org/api/v1/metadata/';
 		protected $paramIndicator = '?';
-		protected $key = 'apikey=loganconnor44@gmail.com';
+		protected $key = 'apikey=f1cf52b7-bdc7-4129-a6f1-af8de093496a';
 		protected $and = '&';
 
 		public function getStatesOverview(){

@@ -23,8 +23,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://politicsMadeSimple.info';
-//$config['base_url'] = 'http://localhost/politicsMadeSimple/';
+//$config['base_url'] = 'http://politicsMadeSimple.info';
+$config['base_url'] = 'http://localhost/politicsMadeSimple/';
+$config['open_states_api_key'] = 'f1cf52b7-bdc7-4129-a6f1-af8de093496a';
 
 /*
 |--------------------------------------------------------------------------

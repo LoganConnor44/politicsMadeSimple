@@ -3,11 +3,11 @@
 
 		protected $baseUrl = 'https://openstates.org/api/v1/metadata/';
 		protected $paramIndicator = '?';
-		protected $key = 'apikey=f1cf52b7-bdc7-4129-a6f1-af8de093496a';
+		protected $key = 'apikey=';
 		protected $and = '&';
 
-		public function getStatesOverview(){
-			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key;
+		public function getStatesOverview($apikey){
+			$apiQuery = $this->baseUrl . $this->paramIndicator . $this->key . $apikey;
 			$apiResponse = file_get_contents($apiQuery);
 			return json_decode($apiResponse);
 		}
@@ -49,7 +49,7 @@
 		}
 
 		public function getStateDetail($userAbbrevState){
-			$apiQuery = $this->baseUrl . $userAbbrevState . $this->paramIndicator . $this->key;
+			$apiQuery = $this->baseUrl . $userAbbrevState . $this->paramIndicator . $this->key . $apikey;
 			$apiResponse = file_get_contents($apiQuery);
 			return json_decode($apiResponse);
 		}

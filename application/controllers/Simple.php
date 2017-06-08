@@ -1,6 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 	class Simple extends CI_Controller
 	{
+		private $apiKey = '';
+
 		public function __construct()
 		{
 			parent::__construct();
@@ -12,6 +14,7 @@
 				'states' => 'states',
 				'events' => 'events'
 			));
+			$this->apiKey = $this->config->item('open_states_api_key');
 		}
 
 		public function index()
@@ -23,7 +26,7 @@
 				'bills' => 'bills'
 			);
 
-			$statesOverview = $this->states->getStatesOverview();
+			$statesOverview = $this->states->getStatesOverview($this->apiKey);
 			$stateNamesAndAbbrev = $this->states->getAllStateNamesAndAbbrevs($statesOverview);
 
 			$data = array(
@@ -36,14 +39,14 @@
 
 		public function ajaxAllStates()
 		{
-			$statesOverview = $this->states->getStatesOverview();
+			$statesOverview = $this->states->getStatesOverview($this->apiKey);
 			$stateNamesAndAbbrev = $this->states->getAllStateNamesAndAbbrevs($statesOverview);
 			echo json_encode($stateNamesAndAbbrev);
 		}
 
 		public function testing()
 		{
-			$statesOverview = $this->states->getStatesOverview();
+			$statesOverview = $this->states->getStatesOverview($this->apiKey);
 
 			$data = array(
 				'billsJSON' => $this->simple->getBillsByYearAndState('2016'),
@@ -54,7 +57,7 @@
 		}
 
 		public function testEvents(){
-			$statesOverview = $this->states->getStatesOverview();
+			$statesOverview = $this->states->getStatesOverview($this->apiKey);
 			$statesOverview = $this->events->getEventsForSelectedState();
 		}
 

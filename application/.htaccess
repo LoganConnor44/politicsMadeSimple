@@ -1,4 +1,5 @@
 <IfModule authz_core_module>
+Header set Access-Control-Allow-Origin "*"
     Require all denied
 </IfModule>
 <IfModule !authz_core_module>
